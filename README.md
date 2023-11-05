@@ -5,8 +5,9 @@ Welcome to the Web Messaging Application! This web-based chat application is des
 
 ## Table of Contents
 
-- [Features](#features)
-  - [Getting Started](#getting-started)
+- [Basic Features](#basic-features)
+- [Three Distinct Features](#three-distinct-features)
+- [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Running the Application](#running-the-application)
@@ -17,7 +18,7 @@ Welcome to the Web Messaging Application! This web-based chat application is des
 - [License](#license)
 
 
-## Features
+## Basic Features
 
 **Real-Time Chat**: You can engage in real-time conversations with other users. Messages are displayed instantly as they are sent, creating a seamless chatting experience.
 
@@ -25,7 +26,15 @@ Welcome to the Web Messaging Application! This web-based chat application is des
 
 **User Authentication**: The application has a user login system, ensuring that only authenticated users can access and use the chat features.
 
-### Getting Started
+## Three Distinct Features
+
+**first**: 
+
+**second**: 
+
+**third**: 
+
+## Getting Started
 
 Follow these instructions to get the Web Chat Application up and running on your local machine.
 
