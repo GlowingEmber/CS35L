@@ -1,16 +1,14 @@
 import React from 'react'
 
 function Friends(){
+
+    const myFriends = ["foo", "bar", "egg", "tom"]
+
     return(
         <>
             <h2>Friends:</h2>
             <ul>
-                <li>
-                    Friend1
-                </li>
-                <li>
-                    Friend2
-                </li>
+                {myFriends.map((item) => (<li>{item}</li>))}
             </ul>
         </>
     )
