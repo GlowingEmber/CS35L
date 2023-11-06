@@ -15,7 +15,7 @@ function Login({setUser}) {
 
 
   function handleSubmit(e){
-    navigate("/home")
+    navigate("/home/welcome")
   }
 
 
