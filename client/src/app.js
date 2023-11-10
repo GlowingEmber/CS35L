@@ -5,7 +5,8 @@ import Home from './Pages/Home/home';
 import Register from "./Pages/register";
 import Profile from "./Pages/Home/profile";
 import Welcome from "./Pages/Home/welcome";
-import Friends from "./Pages/Home/friends";
+import Friends from "./Pages/Home/friends/friends";
+import Conversation from "./Pages/Home/friends/conversation";
 
 function App(){
 
@@ -18,7 +19,9 @@ function App(){
                 <Route path = '/home' element={<Home/>}>
                     <Route path = "welcome" element = {<Welcome/>}></Route>
                     <Route path = "profile" element = {<Profile/>}></Route>
-                    <Route path = "friends" element = {<Friends/>}></Route>
+                    <Route path = "friends" element = {<Friends/>}>
+                        <Route path="/home/friends/:friendList" element={<Conversation/>}/>
+                    </Route>
                 </Route>
                 <Route path = "*" element={<Navigate to = "/login"/>}></Route>
             </Routes>

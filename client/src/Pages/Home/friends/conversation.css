@@ -1,0 +1,14 @@
+#conversation{
+    /*border: 2px solid black;*/
+    width:300px;
+    display:flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+}
+
+#conversationMessages{
+    height: 400px; 
+    overflow: auto;
+    display:flex;
+    flex-direction: column;
+}

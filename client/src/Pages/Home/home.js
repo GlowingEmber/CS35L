@@ -14,6 +14,8 @@ function Home({user, setUser}){
     return(
         <>
             <h1>Homepage</h1>
+            <Link to="/login">Log Out</Link>
+            <br/>
             <Link to="/home/welcome">Welcome Page</Link>
             <br/>
             <Link to="/home/profile">Profile Page</Link>
@@ -21,7 +23,6 @@ function Home({user, setUser}){
             <Link to="/home/friends">Friends</Link>
             <br/>
             <Outlet></Outlet>
-            <Link to="/login">Log Out</Link>
         </>
     ) 
 }
