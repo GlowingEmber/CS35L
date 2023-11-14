@@ -1,0 +1,49 @@
+.header{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 5px solid black;
+    padding-bottom: 8px;
+    margin:8px;
+}
+
+.logout-button {
+    padding: 10px;
+    color: black; /* Set your desired text color */
+    border: 2px solid black;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.3s ease; /* Add a smooth transition effect */
+
+    &:hover {
+        background-color: #007bff; /* Set your desired background color on hover */
+        color: white; /* Set your desired text color on hover */
+        transform: scale(1.05); /* Grow slightly on hover */
+    }
+}
+
+.header-link {
+    text-decoration: none;
+    padding: 10px;
+    color: black; /* Set your desired text color */
+    transition: all 0.3s ease; /* Add a smooth transition effect */
+  
+    /* Style for normal state */
+    border-radius: 5px;
+    margin-right: 5px;
+  
+    /* Style for hover state */
+    &:hover {
+      background-color: #007bff; /* Set your desired background color on hover */
+      color: white; /* Set your desired text color on hover */
+      transform: scale(1.05); /* Grow slightly on hover */
+    }
+}
+
+
+.link-container{
+    flex-grow:1;
+    display:flex;
+    justify-content: flex-start;
+}

@@ -1,13 +1,12 @@
 import React from "react";
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
-import Login from './Pages/login';
-import Home from './Pages/Home/home';
+import Login from './Pages/login/login.js';
+import Home from './Pages/Homepage/home/home';
 import Register from "./Pages/register";
-import Profile from "./Pages/Home/profile";
-import Welcome from "./Pages/Home/welcome";
-import Friends from "./Pages/Home/friends/friends";
-import Conversation from "./Pages/Home/friends/conversation";
-
+import Profile from "./Pages/Homepage/profile/profile";
+import Welcome from "./Pages/Homepage/welcome";
+import Friends from "./Pages/Homepage/friends/friends";
+import Conversation from "./Pages/Homepage/friends/conversation";
 function App(){
 
 
