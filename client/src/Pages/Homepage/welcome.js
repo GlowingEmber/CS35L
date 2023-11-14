@@ -10,6 +10,7 @@ function Welcome({user, setUser}){
     return(
         <>
         <h2>Welcome</h2>
+        <p1>This is our messaging app! Visit your profile or your list of friends from the links above</p1>
         </>
     )
 }

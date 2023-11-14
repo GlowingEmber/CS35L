@@ -21,7 +21,9 @@ function Register() {
 
   return (
     <div>
-      <h2>Register</h2>
+      <div className = 'login-container'>
+        <div className="container">
+        <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <>Name: </>
         <input onChange={(e) => setName(e.target.value)} value={name}></input>
@@ -36,6 +38,8 @@ function Register() {
       </form>
       <Link to="/login">Already have Account? Login</Link>
     </div>
+        </div>
+      </div>
   );
 }
 
