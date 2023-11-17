@@ -15,10 +15,37 @@ function Login({setUser}) {
 
 
 
-  function handleSubmit(e){
+  function handleSubmit(e)
+  {
+    /*e.preventDefault()
+    axios.post('http://localhost:3001/login', {name, pw})
+    .then(result => {console.log(result)
+        if(result.data.status === "Success"){
+            setUser(result.data.id)
+            navigate("/home/welcome")
+        } else if(result.data.status === "Wrong Password"){
+            setErr("wrongp")
+        } else if(result.data.status === "No User Exists"){
+            setErr("nousr")
+        }})
+    .catch(err => console.err(err))*/
+        
     navigate("/home/welcome")
   }
 
+  function showError(){
+    if(err === null){
+        return null
+    } else if(err === "wrongp"){
+        return(
+            <p>Wrong Password!</p>
+        )
+    } else if(err === "nousr"){
+        return(
+            <p>No Username Found</p>
+        )
+    }
+  }
 
 
   return (
