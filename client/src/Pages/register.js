@@ -11,11 +11,37 @@ function Register() {
   const [pw, setPw] = useState("")
   const [color, setColor] = useState("")
   const navigate = useNavigate()
+  const [err, setErr] = useState(null); 
+
 
 
 
   function handleSubmit(e){
-    navigate('/login')
+    e.preventDefault()
+    axios.post('http://localhost:3001/register', {name, pw, color})
+    .then(result => {console.log(result)
+      if(result.data.status === "Success"){
+        navigate("/login")
+      } else{
+        setErr("409") // 409: user already exists
+      }
+    })
+    .catch(err => {console.log(err)
+     if(err.message === "Network Error"){
+      setErr("123")
+     } 
+    })
+  
+  }
+
+  function displayError(){
+    if(err === null){
+      return null
+    } else if(err === "409"){
+      return(<p>Name is taken!</p>)
+    } else if(err === "123"){
+      return(<p>Error connecting to server</p>)
+    }
   }
 
 
