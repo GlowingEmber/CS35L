@@ -13,24 +13,24 @@ function Login({setUser}) {
   const navigate = useNavigate()
   const [err, setErr] = useState(null)
 
-
-
   function handleSubmit(e)
   {
-    /*e.preventDefault()
+    e.preventDefault()
     axios.post('http://localhost:3001/login', {name, pw})
     .then(result => {console.log(result)
         if(result.data.status === "Success"){
-            setUser(result.data.id)
+            //setUser(result.data.id) // needs to be connected to user ???
             navigate("/home/welcome")
         } else if(result.data.status === "Wrong Password"){
             setErr("wrongp")
         } else if(result.data.status === "No User Exists"){
             setErr("nousr")
         }})
-    .catch(err => console.err(err))*/
+    .catch(err => {
+      console.error(err);
+    })
         
-    navigate("/home/welcome")
+    //navigate("/home/welcome")
   }
 
   function showError(){
@@ -66,6 +66,7 @@ function Login({setUser}) {
         value={pw}
       />
       <input type="submit" value="Submit" className="button" />
+      {showError()}
     </form>
     <Link to="/register" className="link-button test">
       New User? Register
