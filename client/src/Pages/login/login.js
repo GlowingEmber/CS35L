@@ -19,7 +19,7 @@ function Login({setUser}) {
     axios.post('http://localhost:3001/login', {name, pw})
     .then(result => {console.log(result)
         if(result.data.status === "Success"){
-            //setUser(result.data.id) // needs to be connected to user ???
+          setUser(result.data.id) // needs to be connected to user ???
             navigate("/home/welcome")
         } else if(result.data.status === "Wrong Password"){
             setErr("wrongp")
