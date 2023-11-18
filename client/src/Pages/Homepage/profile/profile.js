@@ -2,16 +2,44 @@ import React from 'react'
 import { useState } from 'react';
 import './profile.css'
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
 
 function Profile({user, setUser}){
 
     const [bio, setBio] = useState('')
     const [newBio, setNewBio] = useState('')
-    const [name, setName] = useState('testName');
-    const [profilePicture, setProfilePicture] = useState('https://t4.ftcdn.net/jpg/00/97/58/97/360_F_97589769_t45CqXyzjz0KXwoBZT9PRaWGHRk5hQqQ.jpg');
+    const [profilePicture, setProfilePicture] = useState('https://www.cs.ucla.edu/wp-content/uploads/cs/eggert-2.jpg');
+    const [color, setColor] = useState('');
+    const [name, setName] = useState('');
+    const [newColor, setNewColor] = useState('')
+    const navigate = useNavigate()
+    const [userId, setUserId] = useState(null);
+
+    useEffect(() => {
+        const handleFetchData = async () => {
+            try {
+                const searchId = user;
+            
+                const response = await axios.get(`http://localhost:3001/getUserData?_id=${searchId}`);
+                /*Query is passed as a dictionary. Names used determine the keys for the dictionary
+                To have multiple: ?_id=${searchId}&param1=${queryParam1}&param2=${queryParam2} */
+                console.log(response.data);
+                setColor(response.data.color)
+                //setCount(response.data.count)
+                setName(response.data.name)
+            } catch (error) {
+                console.log(error);
+            }
+          };
+    
+        handleFetchData();
+      }, [color]);
+
+    
 
     const changeBio = async () => {
-        setBio(newBio)
+        setBio(newBio)// implement on backend 
         setNewBio('')
     };
 
@@ -32,6 +60,10 @@ function Profile({user, setUser}){
         <br/>
         <br></br>
         <br></br>
+        <h2>Home</h2>
+        {/*<p>Hello {user}!</p>*/}
+        <p>Hello, {name}</p>
+        <p>Your color is: {color}</p>
         </>
     )
 }

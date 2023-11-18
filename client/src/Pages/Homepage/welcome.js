@@ -47,7 +47,7 @@ function Welcome({user, setUser}){
         <>
         <h2>Home</h2>
         {/*<p>Hello {user}!</p>*/}
-        <p>Your name is: {name}</p>
+        <p>Hello, {name}</p>
         <p>Your color is: {color}</p>
         
         </>

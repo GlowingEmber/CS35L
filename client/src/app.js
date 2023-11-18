@@ -21,9 +21,9 @@ function App(){
                 <Route path = '/login' element={<Login setUser = {(name) => setUser(name)}/>}></Route>
 
                 <Route path = '/home' element = {<Home user={user} setUser={(name) => setUser(name)}/>}>
-                    <Route path = "welcome" element = {<Welcome user={user} setUser={(name) => setUser(name)}/>} > </Route>
-                    <Route path = "profile" element = {<Profile/>}></Route>
-                    <Route path = "friends" element = {<Friends/>}>
+                    <Route path = "welcome" element = {<Welcome user={user} setUser={(name) => setUser(name)}/>}></Route>
+                    <Route path = "profile" element = {<Profile user={user} setUser={(name) => setUser(name)}/>}></Route>
+                    <Route path = "friends" element = {<Friends user={user} setUser={(name) => setUser(name)}/>}>
                         <Route path="/home/friends/:friendList" element={<Conversation/>}/>
                     </Route>
                 </Route>
