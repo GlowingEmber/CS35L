@@ -15,6 +15,8 @@ function Profile({user, setUser}){
     const [newColor, setNewColor] = useState('')
     const navigate = useNavigate()
     const [userId, setUserId] = useState(null);
+    
+
 
     useEffect(() => {
         const handleFetchData = async () => {
@@ -26,6 +28,7 @@ function Profile({user, setUser}){
                 To have multiple: ?_id=${searchId}&param1=${queryParam1}&param2=${queryParam2} */
                 console.log(response.data);
                 setColor(response.data.color)
+                setBio(response.data.bio)
                 //setCount(response.data.count)
                 setName(response.data.name)
             } catch (error) {
@@ -39,9 +42,34 @@ function Profile({user, setUser}){
     
 
     const changeBio = async () => {
-        setBio(newBio)// implement on backend 
-        setNewBio('')
+        
+        try {
+            const response = await axios.put(`http://localhost:3001/updateUserBio/${user}`, { bio: newBio });
+            console.log(response.data); // The updated user data (including the new bio)
+            setBio(response.data.bio);
+            setNewBio('');
+        } catch (error) {
+            console.error('Error updating user bio:', error);
+        }
+
+
+        //setBio(newBio)// implement on backend 
+        //setNewBio('')
     };
+
+    const changeColor = async () => {
+        try {
+            //setColor(newColor)
+            //setNewColor('')
+            const response = await axios.put(`http://localhost:3001/updateUserColor/${user}`, { color: newColor });
+            console.log(response.data); // The updated user data (including the new count)
+            setNewColor('')
+            setColor(response.data.color)
+          } catch (error) {
+            console.error('Error updating user count:', error);
+          }
+        };
+
 
     return(
         <>
@@ -51,6 +79,7 @@ function Profile({user, setUser}){
             <img id = "PFP" src={profilePicture} alt="Profile"/>
         </div>
         <p>Username: {name}</p>
+        <p>Your color is: {color}</p>
         <p>Bio: {bio}</p>
         <div>
             <p style={{display:"inline"}}>Change Bio: </p>
@@ -58,12 +87,12 @@ function Profile({user, setUser}){
             <button onClick={changeBio}>Submit Change</button>
         </div>
         <br/>
-        <br></br>
-        <br></br>
-        <h2>Home</h2>
+        
         {/*<p>Hello {user}!</p>*/}
-        <p>Hello, {name}</p>
-        <p>Your color is: {color}</p>
+        
+        <p style={{display:"inline"}}>Change Color: </p>
+            <input value ={newColor} onChange={(e) => setNewColor(e.target.value)}></input>
+            <button onClick={changeColor}>Submit Change</button>
         </>
     )
 }

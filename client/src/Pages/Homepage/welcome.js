@@ -46,10 +46,11 @@ function Welcome({user, setUser}){
     return(
         <>
         <h2>Home</h2>
+        <img src="https://cdn3.vectorstock.com/i/1000x1000/38/87/yeah-word-text-on-talk-shape-vector-45883887.jpg" alt="Image Description" width="75" height="100"></img>
+        <img src="https://ih1.redbubble.net/image.524323222.7602/flat,750x,075,f-pad,750x1000,f8f8f8.u1.jpg" alt="Image Description" width="75" height="100"></img>
         {/*<p>Hello {user}!</p>*/}
         <p>Hello, {name}</p>
         <p>Your color is: {color}</p>
-        
         </>
     )
 }

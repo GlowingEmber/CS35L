@@ -35,6 +35,21 @@ app.post("/login", (req, res) =>{ // API endpoint
         }
     })
 })
+
+app.put('/updateUserBio/:id', async (req, res) => {
+    try {
+        const { id } = req.params; // Get the ID of the user to update from the URL parameter
+        const { bio } = req.body; // Get the new bio value from the request body
+
+        // Use Mongoose to update the bio field for the specified user
+        const updatedUser = await UserModel.findByIdAndUpdate(id, { $set: { bio } }, { new: true });
+
+        res.json(updatedUser);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
 /*
 app.post('/register', (req, res) =>{ // request, response
     const {name, pw, color} = req.body

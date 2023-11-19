@@ -10,6 +10,7 @@ function Register() {
   const [name, setName] = useState("")
   const [pw, setPw] = useState("")
   const [color, setColor] = useState("")
+  const [bio, setBio] = useState("")
   const navigate = useNavigate()
   const [err, setErr] = useState(null); 
 
@@ -18,7 +19,7 @@ function Register() {
 
   function handleSubmit(e){
     e.preventDefault()
-    axios.post('http://localhost:3001/register', {name, pw, color})
+    axios.post('http://localhost:3001/register', {name, pw, color, bio})
     .then(result => {console.log(result)
       if(result.data.status === "Success"){
         navigate("/login")
@@ -59,6 +60,7 @@ function Register() {
         <br></br>
         <>Fav Color: </>
         <input onChange={(e) => setColor(e.target.value)} value = {color}></input>
+        
         <br></br>
         <input type="submit" value="Register"></input>
       </form>
