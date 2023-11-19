@@ -15,7 +15,7 @@ function Profile({user, setUser}){
     const [newColor, setNewColor] = useState('')
     const navigate = useNavigate()
     const [userId, setUserId] = useState(null);
-    
+    const [newPicture, setNewPicture] = useState('');
 
 
     useEffect(() => {
@@ -70,6 +70,23 @@ function Profile({user, setUser}){
           }
         };
 
+        const changePicture = async () => {
+    
+    
+            try {
+                const response = await axios.put(`http://localhost:3001/updateUserProfilePicture/${user}`, { picture: profilePicture });
+                console.log(response.data);
+                setProfilePicture(response.data.picture);
+                //setProfilePicture('');
+              } catch (error) {
+                console.error('Error updating user picture:', error);
+              }
+        };
+    
+        const changeProfilePicture = (newPicture) => {
+            setProfilePicture(newPicture);
+          };
+
 
     return(
         <>
@@ -86,14 +103,28 @@ function Profile({user, setUser}){
             <input value = {newBio} onChange={(e) => setNewBio(e.target.value)}></input>
             <button onClick={changeBio}>Submit Change</button>
         </div>
+        
         <br/>
         
         {/*<p>Hello {user}!</p>*/}
-        
+        <div>
         <p style={{display:"inline"}}>Change Color: </p>
             <input value ={newColor} onChange={(e) => setNewColor(e.target.value)}></input>
             <button onClick={changeColor}>Submit Change</button>
+        </div>
+        
+        <p style={{display:"inline"}}>Change profile Picture: </p>
+            <input value ={profilePicture} onChange={(e) => changeProfilePicture(e.target.value)}></input>
+            <button onClick={changePicture}>Submit Change</button>
+        <div>
+        <button onClick={() => changeProfilePicture('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png')}>
+        Change Profile Picture
+      </button>
+        </div>
+
         </>
+        
+        
     )
 }
 
