@@ -4,8 +4,11 @@ import './profile.css'
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useEffect } from 'react';
+import { CookiesProvider, useCookies } from "react-cookie";
 
-function Profile({user, setUser}){
+function Profile(){
+
+    const [cookies, setCookie] = useCookies(["user"]);
 
     const [bio, setBio] = useState('')
     const [newBio, setNewBio] = useState('')
@@ -14,12 +17,11 @@ function Profile({user, setUser}){
     const [name, setName] = useState('');
     const [newColor, setNewColor] = useState('')
     const navigate = useNavigate()
-    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
         const handleFetchData = async () => {
             try {
-                const searchId = user;
+                const searchId = cookies.user;
             
                 const response = await axios.get(`http://localhost:3001/getUserData?_id=${searchId}`);
                 /*Query is passed as a dictionary. Names used determine the keys for the dictionary
@@ -57,13 +59,6 @@ function Profile({user, setUser}){
             <input value = {newBio} onChange={(e) => setNewBio(e.target.value)}></input>
             <button onClick={changeBio}>Submit Change</button>
         </div>
-        <br/>
-        <br></br>
-        <br></br>
-        <h2>Home</h2>
-        {/*<p>Hello {user}!</p>*/}
-        <p>Hello, {name}</p>
-        <p>Your color is: {color}</p>
         </>
     )
 }

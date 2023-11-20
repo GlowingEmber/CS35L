@@ -4,10 +4,12 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import { CookiesProvider, useCookies } from "react-cookie";
 //import Login from './login';
 
-function Welcome({user, setUser}){
+function Welcome(){
 
+    const [cookies, setCookie] = useCookies(["user"]);
     const [color, setColor] = useState('');
     const [count, setCount] = useState('');
     const [name, setName] = useState('');
@@ -18,7 +20,7 @@ function Welcome({user, setUser}){
     useEffect(() => {
         const handleFetchData = async () => {
             try {
-                const searchId = user;
+                const searchId = cookies.user;
             
                 const response = await axios.get(`http://localhost:3001/getUserData?_id=${searchId}`);
                 /*Query is passed as a dictionary. Names used determine the keys for the dictionary

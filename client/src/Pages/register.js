@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import { ReactDOM } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
+import { CookiesProvider, useCookies } from "react-cookie";
 
 function Register() {
 
@@ -12,8 +13,14 @@ function Register() {
   const [color, setColor] = useState("")
   const navigate = useNavigate()
   const [err, setErr] = useState(null); 
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
-
+  useEffect(() => {
+    if (cookies.user) {
+      removeCookie("user")
+    }
+    setErr(null)
+  }, [cookies]);
 
 
   function handleSubmit(e){
@@ -34,11 +41,11 @@ function Register() {
   
   }
 
-  function displayError(){
+  function showError(){
     if(err === null){
       return null
     } else if(err === "409"){
-      return(<p>Name is taken!</p>)
+      return(<p>Username is taken</p>)
     } else if(err === "123"){
       return(<p>Error connecting to server</p>)
     }
@@ -52,17 +59,25 @@ function Register() {
         <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <>Name: </>
-        <input onChange={(e) => setName(e.target.value)} value={name}></input>
+        <input 
+          type="text"
+          placeholder="Username"
+          onChange={(e) => setName(e.target.value)} 
+          value={name}>
+        </input>
         <br></br>
         <>Password: </>
-        <input type="password" onChange={(e) => setPw(e.target.value)} value = {pw}></input>
+        <input 
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPw(e.target.value)} 
+          value = {pw}>
+        </input>
         <br></br>
-        <>Fav Color: </>
-        <input onChange={(e) => setColor(e.target.value)} value = {color}></input>
-        <br></br>
-        <input type="submit" value="Register"></input>
+        {showError()}
+        <input type="submit" value="Register" className="link-button"></input>
       </form>
-      <Link to="/login">Already have Account? Login</Link>
+      <Link to="/login" className="link-button">Already have Account? Login</Link>
     </div>
         </div>
       </div>

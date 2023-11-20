@@ -17,7 +17,6 @@ app.post("/login", (req, res) =>{ // API endpoint
     .then(user => {
         if(user) {
             if(user.pw === pw){
-                console.log(user)
                 res.json(
                     {status:"Success",
                     name:user.name,

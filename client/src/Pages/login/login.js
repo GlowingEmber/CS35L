@@ -1,17 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import { ReactDOM } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 import './login.css'
+import { CookiesProvider, useCookies } from "react-cookie";
 
-function Login({setUser}) {
+function Login({setCookie2}) {
+
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
   const [name, setName] = useState("")
   const [pw, setPw] = useState("")
   const navigate = useNavigate()
   const [err, setErr] = useState(null)
+
+  useEffect(() => {
+    if (cookies.user) {
+      removeCookie("user")
+    }
+    setErr(null)
+  }, [cookies]);
 
   function handleSubmit(e)
   {
@@ -19,8 +29,9 @@ function Login({setUser}) {
     axios.post('http://localhost:3001/login', {name, pw})
     .then(result => {console.log(result)
         if(result.data.status === "Success"){
-          setUser(result.data.id) // needs to be connected to user ???
-            navigate("/home/welcome")
+          setCookie("user", result.data.id, { path: "/" })
+          //setCookie("user", result.data.id, { path: "/home" })
+          navigate("/home/welcome")
         } else if(result.data.status === "Wrong Password"){
             setErr("wrongp")
         } else if(result.data.status === "No User Exists"){
@@ -29,8 +40,6 @@ function Login({setUser}) {
     .catch(err => {
       console.error(err);
     })
-        
-    //navigate("/home/welcome")
   }
 
   function showError(){
@@ -42,7 +51,7 @@ function Login({setUser}) {
         )
     } else if(err === "nousr"){
         return(
-            <p>No Username Found</p>
+            <p>No User Found</p>
         )
     }
   }
@@ -65,10 +74,10 @@ function Login({setUser}) {
         onChange={(e) => setPw(e.target.value)}
         value={pw}
       />
-      <input type="submit" value="Submit" className="button" />
       {showError()}
+      <input type="submit" value="Submit" className="link-button" />
     </form>
-    <Link to="/register" className="link-button test">
+    <Link to="/register" className="link-button">
       New User? Register
     </Link>
   </div>
