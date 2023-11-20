@@ -15,7 +15,6 @@ function Welcome(){
     const [name, setName] = useState('');
     const [newColor, setNewColor] = useState('')
     const navigate = useNavigate()
-    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
         const handleFetchData = async () => {
@@ -25,7 +24,6 @@ function Welcome(){
                 const response = await axios.get(`http://localhost:3001/getUserData?_id=${searchId}`);
                 /*Query is passed as a dictionary. Names used determine the keys for the dictionary
                 To have multiple: ?_id=${searchId}&param1=${queryParam1}&param2=${queryParam2} */
-                console.log(response.data);
                 setColor(response.data.color)
                 //setCount(response.data.count)
                 setName(response.data.name)
@@ -37,21 +35,18 @@ function Welcome(){
         handleFetchData();
       }, [color, count]);
 
-
-    /*return(
-        <>
-        <h2>Welcome</h2>
-        <p1>This is our messaging app! Visit your profile or your list of friends from the links above</p1>
-        </>
-    )*/
-
     return(
         <>
-        <h2>Home</h2>
-        {/*<p>Hello {user}!</p>*/}
-        <p>Hello, {name}</p>
-        <p>Your color is: {color}</p>
-        
+        {name === '' ?
+        <div className="loader-container">
+            <div className="spinner"></div>
+        </div>
+        :
+        <>
+            <h2>Hello, {name}!</h2>
+            <p>This is our messaging app. Visit your profile or your list of friends from the links above</p>
+        </>
+        }
         </>
     )
 }
