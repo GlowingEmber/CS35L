@@ -22,14 +22,15 @@ function Profile(){
     
     const getUserId = (username) => {
         if (username === null) {
-            return Promise.resolve(null);
+          return Promise.resolve(cookies.user || null);
         }
-        return axios.get(`http://localhost:3001/getUserId?name=${username}`)
-            .then(response => response.data.id)
-            .catch(error => {
-                console.log(error);
-                return null;
-            });
+        return axios
+          .get(`http://localhost:3001/getUserId?name=${username}`)
+          .then((response) => response.data.id)
+          .catch((error) => {
+            console.log(error);
+            return null;
+          });
     };
 
     const { friend } = useParams();
@@ -39,8 +40,7 @@ function Profile(){
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const userId = await getUserId(decodedId);
-                const searchId = userId ? userId : cookies.user
+                const searchId = await getUserId(decodedId);
                 setDisplayedId(searchId)
                 const response = await axios.get(`http://localhost:3001/getUserData?_id=${searchId}`);
                 /*Query is passed as a dictionary. Names used determine the keys for the dictionary
@@ -49,6 +49,7 @@ function Profile(){
                 setName(response.data.name)
             } catch (error) {
                 console.log(error);
+                setName(null)
             }
           };
         fetchData();
@@ -68,29 +69,34 @@ function Profile(){
             <div className="spinner"></div>
         </div>
         :
-        <>
-            {displayedId === cookies.user ?
-            <h2>Your Profile:</h2>:
-            <h2>{name}'s Profile:</h2>
-            }
-            <div>
-                <img id = "PFP" src={profilePicture} alt="Profile"/>
-            </div>
-            {displayedId === cookies.user ?
-            <>
-                <p>Username: {name}</p>
-                <p>Bio: {bio}</p>
-                <div>
-                    <p style={{display:"inline"}}>Change Bio: </p>
-                    <input value = {newBio} onChange={(e) => setNewBio(e.target.value)}></input>
-                    <button onClick={changeBio}>Submit Change</button>
-                </div>
-            </>
+            name === null ?
+            <p>
+                Error: User Not Found
+            </p>
             :
             <>
-            <p>Bio: {bio}</p></>
-            }
-        </>
+                {displayedId === cookies.user ?
+                <h2>Your Profile:</h2>:
+                <h2>{name}'s Profile:</h2>
+                }
+                <div>
+                    <img id = "PFP" src={profilePicture} alt="Profile"/>
+                </div>
+                {displayedId === cookies.user ?
+                <>
+                    <p>Username: {name}</p>
+                    <p>Bio: {bio}</p>
+                    <div>
+                        <p style={{display:"inline"}}>Change Bio: </p>
+                        <input value = {newBio} onChange={(e) => setNewBio(e.target.value)}></input>
+                        <button onClick={changeBio}>Submit Change</button>
+                    </div>
+                </>
+                :
+                <>
+                <p>Bio: {bio}</p></>
+                }
+            </>
         }
         </>
     )
