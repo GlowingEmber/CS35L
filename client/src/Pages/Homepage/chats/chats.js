@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
+import './chats.css'
 
 function Chats() {
   const [myChats, setMyChats] = useState([["foo"], ["bar"], ["bar", "foo"]]);
@@ -14,14 +15,13 @@ function Chats() {
   };
 
   const handleFriendSelection = (friend) => {
-    // Add or remove friend from the selectedFriends array
-    setSelectedFriends((prevSelected) => {
-      if (prevSelected.includes(friend)) {
-        return prevSelected.filter((selected) => selected !== friend);
-      } else {
-        return [...prevSelected, friend];
-      }
-    });
+    if (selectedFriends.includes(friend)) {
+      setSelectedFriends((prevSelected) =>
+        prevSelected.filter((selected) => selected !== friend)
+      );
+    } else {
+      setSelectedFriends((prevSelected) => [...prevSelected, friend]);
+    }
   };
 
   const isDuplicateChat = () => {
@@ -60,17 +60,27 @@ function Chats() {
       </ul>
       <button onClick={handleNewChat}>New Chat</button>
       {showModal && (
-        <div className="modal">
-          <h3>Select Friends for New Chat:</h3>
-          <ul>
-            {friends.map((friend, index) => (
-              <li key={index} onClick={() => handleFriendSelection(friend)}>
-                {friend} {selectedFriends.includes(friend) ? '(Selected)' : ''}
-              </li>
-            ))}
-          </ul>
-          <button onClick={handleCreateChat}>Create Chat</button>
-        </div>
+        <>
+          <div className="overlay" onClick={() => setShowModal(false)}></div>
+          <div className="modal-container">
+            <h3>Select Friend(s) for New Chat:</h3>
+            <ul className='friend-list'>
+              {friends.map((friend, index) => (
+                <li key={index}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={selectedFriends.includes(friend)}
+                      onChange={() => handleFriendSelection(friend)}
+                    />
+                    {" " + friend}
+                  </label>
+                </li>
+              ))}
+            </ul>
+            <button onClick={handleCreateChat}>Create Chat</button>
+          </div>
+        </>
       )}
       <br />
       <Outlet />

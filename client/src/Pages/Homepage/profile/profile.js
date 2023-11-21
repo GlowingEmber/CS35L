@@ -12,7 +12,7 @@ function Profile(){
 
     const [cookies, setCookie] = useCookies(["user"]);
     const [displayedId, setDisplayedId] = useState("")
-    const [bio, setBio] = useState('')
+    const [bio, setBio] = useState('This bio is filler')
     const [newBio, setNewBio] = useState('')
     const [profilePicture, setProfilePicture] = useState('https://www.cs.ucla.edu/wp-content/uploads/cs/eggert-2.jpg');
     const [name, setName] = useState('');
@@ -77,9 +77,10 @@ function Profile(){
             <div>
                 <img id = "PFP" src={profilePicture} alt="Profile"/>
             </div>
-            <p>Bio: {bio}</p>
             {displayedId === cookies.user ?
             <>
+                <p>Username: {name}</p>
+                <p>Bio: {bio}</p>
                 <div>
                     <p style={{display:"inline"}}>Change Bio: </p>
                     <input value = {newBio} onChange={(e) => setNewBio(e.target.value)}></input>
@@ -87,7 +88,8 @@ function Profile(){
                 </div>
             </>
             :
-            <></>
+            <>
+            <p>Bio: {bio}</p></>
             }
         </>
         }
