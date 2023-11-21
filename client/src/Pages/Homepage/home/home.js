@@ -34,6 +34,7 @@ function Home(){
                     <Link to="/home/welcome" className='header-link'>Home</Link>
                     <Link to="/home/profile" className='header-link'>Profile Page</Link>
                     <Link to="/home/friends" className='header-link'>Friends</Link>
+                    <Link to="/home/chats" className='header-link'>Chats</Link>
                 </span>
                 <button onClick={logOut} className='logout-button'>Log Out</button>
             </span>

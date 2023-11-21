@@ -65,7 +65,21 @@ app.get('/getUserData', async (req, res) => {
     } catch (error) {
       res.status(500).json(error);
     }
-  });
+});
+
+app.get('/getUserId', async (req, res) => {
+    try {
+        const { name } = req.query;
+        const query = name ? { name } : {};
+        
+        const user = await UserModel.findOne(query);
+        res.json({
+            id:user._id
+        });
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
 
 app.put('/updateUserCount/:id', async (req, res) => {
     try {

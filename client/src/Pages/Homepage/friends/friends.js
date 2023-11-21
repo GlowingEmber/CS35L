@@ -1,18 +1,21 @@
 import React from 'react'
 import { Link, Outlet } from 'react-router-dom'
+import { CookiesProvider, useCookies } from "react-cookie";
 
 function Friends(){
 
-    const myFriends = [["foo"], ["bar"], ["foo", "bar"]];
+    const myFriends = ["isaacpinto1", "eggert", "red"];
+    const [cookies, setCookie, removeCookie] = useCookies(["user"]);
+
 
     return(
         <>
             <h2>Friends:</h2>
             <ul>
-                {myFriends.map((friendList, index) => (
+                {myFriends.map((friend, index) => (
                 <>
-                    <Link to={`/home/friends/${encodeURIComponent(JSON.stringify(friendList))}`}>
-                        {friendList.join(', ')}
+                    <Link to={`/home/friends/${encodeURIComponent(JSON.stringify(friend))}`}>
+                        {friend}
                     </Link>
                     <br/>
                 </>
