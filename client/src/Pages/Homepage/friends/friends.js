@@ -4,7 +4,7 @@ import { CookiesProvider, useCookies } from "react-cookie";
 
 function Friends(){
 
-    const myFriends = ["isaacpinto1", "eggert", "red"];
+    const myFriends = ["isaacpinto1", "pauleggert", "red"];
     const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
 
@@ -13,16 +13,16 @@ function Friends(){
             <h2>Friends:</h2>
             <ul>
                 {myFriends.map((friend, index) => (
-                <>
+                <React.Fragment key={index}>
                     <Link to={`/home/friends/${encodeURIComponent(JSON.stringify(friend))}`}>
-                        {friend}
+                    {friend}
                     </Link>
-                    <br/>
-                </>
-            ))}
+                    <br />
+                </React.Fragment>
+                ))}
             </ul>
-            <br/>
-            <Outlet></Outlet>
+            <br />
+            <Outlet />
         </>
     )
 }

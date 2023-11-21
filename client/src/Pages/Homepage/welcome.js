@@ -10,10 +10,7 @@ import { CookiesProvider, useCookies } from "react-cookie";
 function Welcome(){
 
     const [cookies, setCookie] = useCookies(["user"]);
-    const [color, setColor] = useState('');
-    const [count, setCount] = useState('');
     const [name, setName] = useState('');
-    const [newColor, setNewColor] = useState('')
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -24,7 +21,6 @@ function Welcome(){
                 const response = await axios.get(`http://localhost:3001/getUserData?_id=${searchId}`);
                 /*Query is passed as a dictionary. Names used determine the keys for the dictionary
                 To have multiple: ?_id=${searchId}&param1=${queryParam1}&param2=${queryParam2} */
-                setColor(response.data.color)
                 //setCount(response.data.count)
                 setName(response.data.name)
             } catch (error) {
@@ -33,7 +29,7 @@ function Welcome(){
           };
     
         handleFetchData();
-      }, [color, count]);
+      }, []);
 
     return(
         <>

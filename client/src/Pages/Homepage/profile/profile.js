@@ -41,7 +41,6 @@ function Profile(){
             try {
                 const userId = await getUserId(decodedId);
                 const searchId = userId ? userId : cookies.user
-                console.log(searchId)
                 setDisplayedId(searchId)
                 const response = await axios.get(`http://localhost:3001/getUserData?_id=${searchId}`);
                 /*Query is passed as a dictionary. Names used determine the keys for the dictionary
