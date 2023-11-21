@@ -10,6 +10,7 @@ function Conversation(){
   const decodedFriendList = JSON.parse(decodeURIComponent(friendList));
   const user = "userName1"
   const messagesColumnRef = useRef(null);
+  const [message, setMessage] = useState()
 
   const convodb = {
       "foo,userName1": [["userName1", "hey there foo!"], ["foo", "hey there usr!"], ["foo", "How are you?"], ["userName1", "I'm great!"]],
@@ -60,6 +61,9 @@ function Conversation(){
       messagesColumnRef.current.scrollHeight;
   }, [friendConversation]);
 
+  function handleSendMessage(){
+    setMessage("")
+  }
 
 
   return (
@@ -74,8 +78,8 @@ function Conversation(){
             );
           })}
         </div>
-        <input></input>
-        <button>Send</button>
+        <input onChange={(e) => setMessage(e.target.value)} value = {message}></input>
+        <button onClick={handleSendMessage}>Send</button>
       </div>
     </>
   );
