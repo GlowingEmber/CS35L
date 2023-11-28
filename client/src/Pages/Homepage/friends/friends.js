@@ -3,7 +3,7 @@ import { Link, Outlet } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 function Friends() {
-  const [myFriends, setMyFriends] = useState(['isaacpinto1', 'pauleggert', 'red', 'gertge']);
+  const [myFriends, setMyFriends] = useState(['isaacpinto1', 'pauleggert', 'red', 'gertge', 'michael']);
   const [friendRequests, setFriendRequests] = useState(['newFriend1', 'newFriend2']);
   const [showFriendRequests, setShowFriendRequests] = useState(false);
   const [newFriendName, setNewFriendName] = useState('');

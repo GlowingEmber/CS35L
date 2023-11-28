@@ -27,7 +27,7 @@ function Profile(){
           return Promise.resolve(cookies.user || null);
         }
         return axios
-          .get(`http://localhost:3001/getUserId?name=${displayedId}`)
+          .get(`http://localhost:3001/getUserId?name=${username}`)
           .then((response) => response.data.id)
           .catch((error) => {
             console.log(error);
@@ -43,7 +43,7 @@ function Profile(){
         const fetchData = async () => {
             try {
                 const searchId = await getUserId(decodedId);
-                setDisplayedId(searchId)
+                console.log(searchId)
                 const response = await axios.get(`http://localhost:3001/getUserData?_id=${searchId}`);
                 /*Query is passed as a dictionary. Names used determine the keys for the dictionary
                 To have multiple: ?_id=${searchId}&param1=${queryParam1}&param2=${queryParam2} */
@@ -51,13 +51,14 @@ function Profile(){
                 setBio(response.data.bio)
                 setName(response.data.name)
                 setProfilePicture(response.data.profilepicture)
+                setDisplayedId(searchId)
             } catch (error) {
                 console.log(error);
                 setName(null)
             }
           };
         fetchData();
-      }, [decodedId]);
+      }, [decodedId, profilePicture]);
 
       const changeParameter = async () => {
         try {
