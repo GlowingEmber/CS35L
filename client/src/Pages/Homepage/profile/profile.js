@@ -14,18 +14,20 @@ function Profile(){
     const [displayedId, setDisplayedId] = useState("")
     const [bio, setBio] = useState('This bio is filler')
     const [newBio, setNewBio] = useState('')
-    const [profilePicture, setProfilePicture] = useState('https://www.cs.ucla.edu/wp-content/uploads/cs/eggert-2.jpg');
+    const [profilePicture, setProfilePicture] = useState('');
+    const [newprofilePicture, setNewProfilePicture] = useState('');
     const [name, setName] = useState('');
     const navigate = useNavigate()
+    const [newPicture, setNewPicture] = useState('');
 
-
+    const [newParameter, setNewParameter] = useState(''); // Add state for the new parameter
     
     const getUserId = (username) => {
         if (username === null) {
           return Promise.resolve(cookies.user || null);
         }
         return axios
-          .get(`http://localhost:3001/getUserId?name=${username}`)
+          .get(`http://localhost:3001/getUserId?name=${displayedId}`)
           .then((response) => response.data.id)
           .catch((error) => {
             console.log(error);
@@ -48,6 +50,7 @@ function Profile(){
                 //setCount(response.data.count)
                 setBio(response.data.bio)
                 setName(response.data.name)
+                setProfilePicture(response.data.profilepicture)
             } catch (error) {
                 console.log(error);
                 setName(null)
@@ -56,7 +59,18 @@ function Profile(){
         fetchData();
       }, [decodedId]);
 
-    
+      const changeParameter = async () => {
+        try {
+          // Your logic for changing the new parameter
+          // Example: updating parameter using axios
+          const response = await axios.put(`http://localhost:3001/updateParameter/${displayedId}`, { parameter: newParameter });
+          console.log(response.data); // Log the updated data
+          // Update state or perform other actions based on the response
+          setNewParameter(''); // Reset the input field
+        } catch (error) {
+          console.error('Error updating parameter:', error);
+        }
+      };
 
     const changeBio = async () => {
         try {
@@ -69,9 +83,25 @@ function Profile(){
         }
     };
 
+    const changePicture = async () => {
+        try {
+            const response = await axios.put(`http://localhost:3001/updateProfilePicture/${displayedId}`, { profilepicture: newprofilePicture });
+            console.log(response.data); // The updated user data (including the new count)
+            setNewProfilePicture('')
+            setProfilePicture(response.data.picture)
+          } catch (error) {
+            console.error('Error updating user count:', error);
+          } 
 
+
+    };
+
+    /*const changeProfilePicture = (newPicture) => {
+        setProfilePicture(newPicture);
+      };*/
 
     return(
+        
         <>
         {name === '' ?
         <div className="loader-container">
@@ -93,6 +123,7 @@ function Profile(){
                 </div>
                 {displayedId === cookies.user ?
                 <>
+                    <p>pic source: {profilePicture}</p>
                     <p>Username: {name}</p>
                     <p>Bio: {bio}</p>
                     <div>
@@ -105,7 +136,11 @@ function Profile(){
                 <>
                 <p>Bio: {bio}</p></>
                 }
+                <p style={{ display: 'inline' }}>Change PF Picture: </p>
+                <input value={newprofilePicture} onChange={(e) => setNewProfilePicture(e.target.value)}></input>
+                <button onClick={changePicture}>Submit Change</button>
             </>
+            
         }
         </>
     )
