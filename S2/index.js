@@ -124,6 +124,21 @@ app.delete('/deleteDocument/:id', async (req, res) => {
   });
 
 
+  app.put('/updateUserBio/:id', async (req, res) => {
+    try {
+        const { id } = req.params; // Get the ID of the user to update from the URL parameter
+        const { bio } = req.body; // Get the new bio value from the request body
+
+        // Use Mongoose to update the bio field for the specified user
+        const updatedUser = await UserModel.findByIdAndUpdate(id, { $set: { bio } }, { new: true });
+
+        res.json(updatedUser);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
+
 app.listen(3001, () =>{ // Start on this port
     console.log("server is running")
 })

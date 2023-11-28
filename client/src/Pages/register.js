@@ -10,6 +10,7 @@ function Register() {
 
   const [name, setName] = useState("")
   const [pw, setPw] = useState("")
+  const [bio, setBio] = useState("")
   const [color, setColor] = useState("")
   const navigate = useNavigate()
   const [err, setErr] = useState(null); 
@@ -29,7 +30,7 @@ function Register() {
       setErr("noname")
       return;
     }
-    axios.post('http://localhost:3001/register', {name, pw, color})
+    axios.post('http://localhost:3001/register', {name, pw, color, bio})
     .then(result => {console.log(result)
       if(result.data.status === "Success"){
         navigate("/login")

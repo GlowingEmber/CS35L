@@ -46,6 +46,7 @@ function Profile(){
                 /*Query is passed as a dictionary. Names used determine the keys for the dictionary
                 To have multiple: ?_id=${searchId}&param1=${queryParam1}&param2=${queryParam2} */
                 //setCount(response.data.count)
+                setBio(response.data.bio)
                 setName(response.data.name)
             } catch (error) {
                 console.log(error);
@@ -58,9 +59,17 @@ function Profile(){
     
 
     const changeBio = async () => {
-        setBio(newBio)// implement on backend 
-        setNewBio('')
+        try {
+            const response = await axios.put(`http://localhost:3001/updateUserBio/${displayedId}`, { bio: newBio });
+            console.log(response.data); // The updated user data (including the new bio)
+            setBio(response.data.bio);
+            setNewBio('');
+        } catch (error) {
+            console.error('Error updating user bio:', error);
+        }
     };
+
+
 
     return(
         <>
