@@ -26,12 +26,17 @@ function Login({setCookie2}) {
   function handleSubmit(e)
   {
     e.preventDefault()
+    if(name === "" || pw === ""){
+      setErr("noname")
+      return;
+    }
     axios.post('http://localhost:3001/login', {name, pw})
     .then(result => {console.log(result)
         if(result.data.status === "Success"){
           setCookie("user", result.data.id, { path: "/" })
-          //setCookie("user", result.data.id, { path: "/home" })
-          navigate("/home/welcome")
+          if(result.data.name !== ''){
+            navigate("/home/welcome")
+          }
         } else if(result.data.status === "Wrong Password"){
             setErr("wrongp")
         } else if(result.data.status === "No User Exists"){
@@ -53,6 +58,10 @@ function Login({setCookie2}) {
         return(
             <p>No User Found</p>
         )
+    } else if(err === "noname"){
+      return(
+        <p>Username/password cannot be empty</p>
+      )
     }
   }
 

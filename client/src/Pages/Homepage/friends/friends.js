@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import { CookiesProvider, useCookies } from 'react-cookie';
+import { useCookies } from 'react-cookie';
 
 function Friends() {
-  const [myFriends, setMyFriends] = useState(['isaacpinto1', 'pauleggert', 'red', "gertge"]);
+  const [myFriends, setMyFriends] = useState(['isaacpinto1', 'pauleggert', 'red', 'gertge']);
   const [friendRequests, setFriendRequests] = useState(['newFriend1', 'newFriend2']);
   const [showFriendRequests, setShowFriendRequests] = useState(false);
+  const [newFriendName, setNewFriendName] = useState('');
+  const [cookies] = useCookies(['user']);
 
   const acceptFriendRequest = (username) => {
-    // Logic to add the user to your friends list
     setMyFriends((prevFriends) => [...prevFriends, username]);
-    // Remove the friend request
     setFriendRequests((prevRequests) => prevRequests.filter((request) => request !== username));
   };
 
   const denyFriendRequest = (username) => {
-    // Logic to deny the friend request
-    // Remove the friend request
     setFriendRequests((prevRequests) => prevRequests.filter((request) => request !== username));
+  };
+
+  const addFriend = () => {
+    console.log(`Adding friend: ${newFriendName}`);
+    setNewFriendName(''); // Clear the input field after adding a friend
   };
 
   return (
@@ -33,6 +36,16 @@ function Friends() {
           </React.Fragment>
         ))}
       </ul>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <p style={{ marginRight: '8px' }}>Add Friend:</p>
+        <input
+          type="text"
+          value={newFriendName}
+          onChange={(e) => setNewFriendName(e.target.value)}
+          style={{ marginRight: '8px' }}
+        />
+        <button onClick={addFriend}>Add</button>
+      </div>
       <button onClick={() => setShowFriendRequests(true)}>View Friend Requests</button>
       {/* Friend Requests Modal */}
       {showFriendRequests && (
@@ -41,7 +54,7 @@ function Friends() {
           <ul>
             {friendRequests.map((request, index) => (
               <li key={index}>
-                {request + " "}
+                {request + ' '}
                 <button onClick={() => acceptFriendRequest(request)}>Accept</button>
                 <button onClick={() => denyFriendRequest(request)}>Deny</button>
               </li>

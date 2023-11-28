@@ -1,13 +1,9 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import Welcome from '../welcome';
-import Profile from '../profile/profile';
-import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
 import { Outlet } from 'react-router-dom';
-import { CookiesProvider, useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import './home.css'
 
 function Home(){
@@ -23,7 +19,9 @@ function Home(){
     useEffect(() => {
         if (!cookies.user) {
           navigate("/login");
+          return;
         }
+        navigate("/home/welcome")
       }, [cookies]);
 
 

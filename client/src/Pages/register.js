@@ -25,6 +25,10 @@ function Register() {
 
   function handleSubmit(e){
     e.preventDefault()
+    if(name === "" || pw === ""){
+      setErr("noname")
+      return;
+    }
     axios.post('http://localhost:3001/register', {name, pw, color})
     .then(result => {console.log(result)
       if(result.data.status === "Success"){
@@ -48,6 +52,8 @@ function Register() {
       return(<p>Username is taken</p>)
     } else if(err === "123"){
       return(<p>Error connecting to server</p>)
+    } else if(err === "noname"){
+      return(<p>Username/password cannot be empty</p>)
     }
   }
 
