@@ -12,9 +12,9 @@ var localNow = new Date( record.date.getTime() -  ( record.offset * 60000 ) );
 
 //open a connection to the database 
 const messageSchema = new mongoose.Schema({
-   username : {type: String, required: true };
-   message_content : {type: String, required: true};
-   timestamp :{type: Date , Default: Date.now};
+   username : {type: String, required: true },
+   message_content : {type: String, required: true},
+   timestamp :{type: Date , Default: Date.now},
 });
 
 const Message =mongose.model ('Message' , messageSchema);
