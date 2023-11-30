@@ -2,6 +2,7 @@ const express = require("express")
 const mongoose = require("mongoose")
 const cors = require("cors")
 const UserModel = require('./models/user')
+const FriendReqModel = require('./models/friendreq')
 
 const app = express()
 app.use(express.json())
@@ -34,6 +35,77 @@ app.post("/login", (req, res) =>{ // API endpoint
         }
     })
 })
+
+/*
+app.delete('/deleteFriendRequest/:user_id', async (req, res) => {
+  }); 
+*/
+
+////////////////////////////
+//// WIP
+////////////////////////////
+
+/* 
+app.get('/checkFriends/:person1/:person2', (req, res) => {
+    FriendReqModel.find({
+        $or: [
+            {$and: [{friender: req.params.person1},{recipient: req.params.person2}]},
+            {$and: [{friender: req.params.person2},{recipient: req.params.person1}]}
+        ]
+    }, function (err, results) {
+
+    })
+})
+
+app.post('/sendFriendRequest/:friender/:recipient', (req, res) => {
+    // const {friender, recipient, accepted, timestamp} = req.body;
+
+    FriendReqModel.find({
+        $or: [
+            {$and: [{friender: req.params.friender},{recipient: req.params.recipient}]},
+            {$and: [{friender: req.params.recipient},{recipient: req.params.friender}]}
+        ]
+    })
+    .then(user => {
+        if(user) {
+            res.json({
+                status: "Failure",
+                user: null
+            })
+        } else{
+            UserModel.create({name,pw, color, count:0})
+            .then(user => res.json({
+                status: "Success",
+                user: user}))
+            .catch(err => res.json(err))
+        }
+    })
+})
+
+app.get('/getIncomingFriendRequests/:user_id', async (req, res) => {
+    try {
+    const incomingFriends = await FriendReqModel.find({recipient: req.params.user_id, accepted: false});
+    res.json(incomingFriends);
+    } catch (error) {
+    res.status(500).json(error);
+    }
+});
+
+app.get('/getOutgoingFriendRequests/:user_id', async (req, res) => {
+    try {
+    const incomingFriends = await FriendReqModel.find({friender: req.params.user_id, accepted: false});
+    res.json(incomingFriends);
+    } catch (error) {
+    res.status(500).json(error);
+    }
+});
+
+app.get('/getFriends/:user_id', async (req, res) => {
+    FriendReqModel.find({})
+});
+
+*/
+
 
 app.post('/register', (req, res) =>{ // request, response
     const {name, pw, color} = req.body
