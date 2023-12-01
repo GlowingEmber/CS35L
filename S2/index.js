@@ -36,10 +36,26 @@ app.post("/login", (req, res) =>{ // API endpoint
     })
 })
 
-/*
-app.delete('/deleteFriendRequest/:user_id', async (req, res) => {
-  }); 
-*/
+app.get('/checkFriends', (req, res) => {
+    try {
+        const person1 = req.query.person1;
+        const person2 = req.query.person2;
+        FriendReqModel.findOne({
+            $or: [
+                {$and: [{friender: person1},{recipient: person2},{accepted: true}]},
+                {$and: [{friender: person2},{recipient: person1},{accepted: true}]}
+            ]
+        })
+        .then(friendship => {
+            var result = false;
+            if (friendship) { result = true; }
+            res.json({results: result})
+        })
+    } catch (error) {
+        res.status(500).json(error);
+    }
+})
+
 
 ////////////////////////////
 //// WIP
@@ -80,25 +96,6 @@ app.post('/sendFriendRequest', (req, res) => {
     */
 })
 
-app.get('/checkFriends', (req, res) => {
-    try {
-        const person1 = req.query.person1;
-        const person2 = req.query.person2;
-        FriendReqModel.findOne({
-            $or: [
-                {$and: [{friender: person1},{recipient: person2}]},
-                {$and: [{friender: person2},{recipient: person1}]}
-            ]
-        })
-        .then(friendship => {
-            var result = false;
-            if (friendship) { result = true; }
-            res.json({results: result})
-        })
-    } catch (error) {
-        res.status(500).json(error);
-    }
-})
 
 /*
 app.get('/checkFriends/:person1/:person2', (req, res) => {
@@ -139,7 +136,10 @@ app.get('/getFriends/:user_id', async (req, res) => {
     FriendReqModel.find({})
 });
 
-
+/*
+app.delete('/deleteFriendRequest/:user_id', async (req, res) => {
+  }); 
+*/
 
 app.post('/register', (req, res) =>{ // request, response
     const {name, pw, color} = req.body
