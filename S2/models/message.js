@@ -1,22 +1,61 @@
-//record data in mongoDb
+
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
 const mongoose = require('mongoose');
 
-/*An example from MongoDB.com on how to store current date and client's offset
-var now = new Date();
-db.data.save( { date: now,
-                offset: now.getTimezoneOffset() } );
+// Initialize Express app and HTTP server
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
 
-var record = db.data.findOne();
-var localNow = new Date( record.date.getTime() -  ( record.offset * 60000 ) );
-*/
+//connect
+const mongoDB = mongodb+srv://max09lui:T4XEs0OHoUJIcJGF@cluster0.kcdmgrl.mongodb.net/?retryWrites=true&w=majority;
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-//open a connection to the database 
-const messageSchema = new mongoose.Schema({
-   username : {type: String, required: true },
-   message_content : {type: String, required: true},
-   timestamp :{type: Date , Default: Date.now},
+const Schema = mongoose.Schema;
+const MessageSchema = new Schema({
+    content: String,
+    sender: String,
+    timestamp: { type: Date, default: Date.now }
 });
 
-const Message = mongoose.model('Message', messageSchema);
-module.exports = Message; 
+const Message = mongoose.model('Message', MessageSchema);
 
+io.on('connection', (socket) => {
+    console.log('A user connected');
+
+    Message.find().sort({ timestamp: 1 }).exec((err, messages) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        socket.emit('initialMessages', messages);
+    });
+
+    socket.on('newMessage', (data) => {
+        const newMessage = new Message(data);
+
+        // Save the message in MongoDB
+        newMessage.save((err) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+
+            // Broadcast the message to all connected users
+            io.emit('messageReceived', data);
+        });
+    });
+
+    socket.on('disconnect', () => {
+        console.log('A user disconnected');
+    });
+});
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
