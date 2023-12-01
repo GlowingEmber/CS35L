@@ -42,8 +42,8 @@ app.get('/checkFriends', (req, res) => {
         const person2 = req.query.person2;
         FriendReqModel.findOne({
             $or: [
-                {$and: [{friender: person1},{recipient: person2},{accepted: true}]},
-                {$and: [{friender: person2},{recipient: person1},{accepted: true}]}
+                {friender: person1, recipient: person2, accepted: true},
+                {friender: person2, recipient: person1, accepted: true}
             ]
         })
         .then(friendship => {
@@ -99,7 +99,7 @@ app.get('/getOutgoingFriendRequests/:user', async (req, res) => {
 
 
 ////////////////////////////
-//// WIP
+//// WIP BELOW
 ////////////////////////////
 
   
@@ -141,6 +141,10 @@ app.post('/sendFriendRequest', (req, res) => {
 app.delete('/deleteFriendRequest/:user_id', async (req, res) => {
   }); 
 */
+
+///////////////////////////
+//// END OF WIP
+///////////////////////////
 
 app.post('/register', (req, res) =>{ // request, response
     const {name, pw, color} = req.body
