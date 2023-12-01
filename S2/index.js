@@ -56,10 +56,39 @@ app.get('/checkFriends', (req, res) => {
     }
 });
 
+app.get('/getFriendsList/:user', async (req, res) => {
+    try {
+        const user = req.params.user;
+        FriendReqModel.find({
+            $or: [
+                {friender: user, accepted: true},
+                {recipient: user, accepted: true}
+            ]
+        })
+        .then(friendsList => {
+            res.json({friends: friendsList})
+        })
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
 app.get('/getIncomingFriendRequests/:user', async (req, res) => {
     try {
         const user = req.params.user;
         FriendReqModel.find({recipient: user,accepted: false})
+        .then(friendRequests => {
+            res.json({friendRequests: friendRequests})
+        })
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
+app.get('/getOutgoingFriendRequests/:user', async (req, res) => {
+    try {
+        const user = req.params.user;
+        FriendReqModel.find({friender: user,accepted: false})
         .then(friendRequests => {
             res.json({friendRequests: friendRequests})
         })
@@ -107,47 +136,6 @@ app.post('/sendFriendRequest', (req, res) => {
     })
     */
 })
-
-
-/*
-app.get('/checkFriends/:person1/:person2', (req, res) => {
-    FriendReqModel.find({
-        $or: [
-            {$and: [{friender: req.params.person1},{recipient: req.params.person2}]},
-            {$and: [{friender: req.params.person2},{recipient: req.params.person1}]}
-        ]
-    }, function (err, results) {
-        if (err) {
-            res.json(err);
-        } else {
-            res.json({"result": false});
-        }
-    })
-})
-*/
-
-
-app.get('/getIncomingFriendRequests/:user_id', async (req, res) => {
-    try {
-    const incomingFriends = await FriendReqModel.find({recipient: req.params.user_id, accepted: false});
-    res.json(incomingFriends);
-    } catch (error) {
-    res.status(500).json(error);
-    }
-});
-
-app.get('/getOutgoingFriendRequests/:user_id', async (req, res) => {
-    try {
-    const incomingFriends = await FriendReqModel.find({friender: req.params.user_id, accepted: false});
-    res.json(incomingFriends);
-    } catch (error) {
-    res.status(500).json(error);
-    }
-});
-
-app.get('/getFriends/:user_id', async (req, res) => {
-    FriendReqModel.find({})
-});
 
 /*
 app.delete('/deleteFriendRequest/:user_id', async (req, res) => {
