@@ -3,10 +3,9 @@ const mongoose = require('mongoose')
 const friendReqSchema = new mongoose.Schema({
     friender: String,
     recipient: String,
-    accepted: Boolean, // TRUE for accepted; FALSE for pending/outgoing. Deleted upon rejection by recipient
     timestamp: String,
+    accepted: Boolean, // TRUE for accepted; FALSE for pending/outgoing. Deleted upon rejection by recipient
 })
 
-const FriendReqModel = mongoose.model("friendReqs", friendReqSchema) // logins is name of table in DB
+const FriendReqModel = mongoose.model("friendreqs", friendReqSchema) // logins is name of table in DB
 module.exports = FriendReqModel
-
