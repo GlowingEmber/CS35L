@@ -45,21 +45,18 @@ app.delete('/deleteFriendRequest/:user_id', async (req, res) => {
 //// WIP
 ////////////////////////////
 
-/* 
-app.get('/checkFriends/:person1/:person2', (req, res) => {
-    FriendReqModel.find({
-        $or: [
-            {$and: [{friender: req.params.person1},{recipient: req.params.person2}]},
-            {$and: [{friender: req.params.person2},{recipient: req.params.person1}]}
-        ]
-    }, function (err, results) {
-
-    })
-})
-
-app.post('/sendFriendRequest/:friender/:recipient', (req, res) => {
+  
+app.post('/sendFriendRequest', (req, res) => {
+    const {friender, recipient, timestamp} = req.body;
+    const time_sent = Date.now();
+    FriendReqModel.create({friender, recipient, timestamp:time_sent, accepted:false})
+            .then(fReq => res.json({
+                status: "Success",
+                friendRequest: fReq}))
+            .catch(err => res.json(err))
     // const {friender, recipient, accepted, timestamp} = req.body;
 
+    /*
     FriendReqModel.find({
         $or: [
             {$and: [{friender: req.params.friender},{recipient: req.params.recipient}]},
@@ -80,7 +77,45 @@ app.post('/sendFriendRequest/:friender/:recipient', (req, res) => {
             .catch(err => res.json(err))
         }
     })
+    */
 })
+
+app.get('/checkFriends', (req, res) => {
+    try {
+        const person1 = req.query.person1;
+        const person2 = req.query.person2;
+        FriendReqModel.findOne({
+            $or: [
+                {$and: [{friender: person1},{recipient: person2}]},
+                {$and: [{friender: person2},{recipient: person1}]}
+            ]
+        })
+        .then(friendship => {
+            var result = false;
+            if (friendship) { result = true; }
+            res.json({results: result})
+        })
+    } catch (error) {
+        res.status(500).json(error);
+    }
+})
+
+/*
+app.get('/checkFriends/:person1/:person2', (req, res) => {
+    FriendReqModel.find({
+        $or: [
+            {$and: [{friender: req.params.person1},{recipient: req.params.person2}]},
+            {$and: [{friender: req.params.person2},{recipient: req.params.person1}]}
+        ]
+    }, function (err, results) {
+        if (err) {
+            res.json(err);
+        } else {
+            res.json({"result": false});
+        }
+    })
+})
+*/
 
 app.get('/getIncomingFriendRequests/:user_id', async (req, res) => {
     try {
@@ -104,7 +139,6 @@ app.get('/getFriends/:user_id', async (req, res) => {
     FriendReqModel.find({})
 });
 
-*/
 
 
 app.post('/register', (req, res) =>{ // request, response
