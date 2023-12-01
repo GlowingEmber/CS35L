@@ -54,7 +54,19 @@ app.get('/checkFriends', (req, res) => {
     } catch (error) {
         res.status(500).json(error);
     }
-})
+});
+
+app.get('/getIncomingFriendRequests/:user', async (req, res) => {
+    try {
+        const user = req.params.user;
+        FriendReqModel.find({recipient: user,accepted: false})
+        .then(friendRequests => {
+            res.json({friendRequests: friendRequests})
+        })
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
 
 
 ////////////////////////////
@@ -113,6 +125,7 @@ app.get('/checkFriends/:person1/:person2', (req, res) => {
     })
 })
 */
+
 
 app.get('/getIncomingFriendRequests/:user_id', async (req, res) => {
     try {
