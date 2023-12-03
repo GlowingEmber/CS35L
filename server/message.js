@@ -1,22 +1,25 @@
-//record data in mongoDb
-const mongoose = require('mongoose');
+const express = require('express');
+const router = express.Router();
+const { addMessage, getConversation } = require('../models/messages');
 
-/*An example from MongoDB.com on how to store current date and client's offset
-var now = new Date();
-db.data.save( { date: now,
-                offset: now.getTimezoneOffset() } );
-
-var record = db.data.findOne();
-var localNow = new Date( record.date.getTime() -  ( record.offset * 60000 ) );
-*/
-
-//open a connection to the database 
-const messageSchema = new mongoose.Schema({
-   username : {type: String, required: true };
-   message_content : {type: String, required: true};
-   timestamp :{type: Date , Default: Date.now};
+router.post('/sendMessage', async (req, res) => {
+    const { senderId, receiverId, text } = req.body;
+    try {
+        const newMessage = await addMessage(senderId, receiverId, text);
+        res.status(200).json({ message: 'Message sent successfully', data: newMessage });
+    } catch (error) {
+        res.status(500).json({ message: 'Error sending message', error: error.message });
+    }
 });
 
-const Message =mongose.model ('Message' , messageSchema);
-module.exports=Message; 
+router.get('/getConversation/:userId1/:userId2', async (req, res) => {
+    const { userId1, userId2 } = req.params;
+    try {
+        const conversation = await getConversation(userId1, userId2);
+        res.status(200).json({ message: 'Conversation retrieved successfully', data: conversation });
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving conversation', error: error.message });
+    }
+});
 
+module.exports = router;
