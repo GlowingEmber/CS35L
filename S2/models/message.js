@@ -44,4 +44,4 @@ async function getConversation(userId1, userId2) {
     return conversation ? conversation.messages : [];
 }
 
-module.exports = { addMessage, getConversation };
+module.exports = MessageModel;
