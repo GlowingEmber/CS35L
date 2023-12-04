@@ -41,7 +41,7 @@ app.post('/sendMessage', async (req, res) => {
 });
 
 
-app.get('/getConversation/:userId1/:userId2', async (req, res) => {
+/*app.get('/getConversation/:userId1/:userId2', async (req, res) => {
     const { userId1, userId2 } = req.params;
     try {
         const conversation = await getConversation(userId1, userId2);
@@ -49,7 +49,7 @@ app.get('/getConversation/:userId1/:userId2', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error retrieving conversation', error: error.message });
     }
-});
+});*/
 
 app.post("/login", (req, res) =>{ // API endpoint
     const {name, pw} = req.body;
