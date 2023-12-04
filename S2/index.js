@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 const UserModel = require('./models/user')
 const messageModel = require('./models/message')
+const { addMessage, getConversation } = require('../models/messages');
 
 const app = express()
 app.use(express.json())
