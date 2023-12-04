@@ -11,7 +11,7 @@ app.use(cors())
 
 mongoose.connect("mongodb+srv://max09lui:T4XEs0OHoUJIcJGF@cluster0.kcdmgrl.mongodb.net/?retryWrites=true&w=majority")
 
-app.get('/getConversation/:userId1/:userId2', async (req, res) => {
+/*app.get('/getConversation/:userId1/:userId2', async (req, res) => {
     const { userId1, userId2 } = req.params;
     try {
         const conversation = await messageModel.getConversation(userId1, userId2);
@@ -20,16 +20,26 @@ app.get('/getConversation/:userId1/:userId2', async (req, res) => {
         res.status(500).json({ message: 'Error retrieving conversation', error: error.message });
     }
 });
+*/
 
-app.post('/sendMessage', async (req, res) => {
-    const { senderId, receiverId, text } = req.body;
+app.post('/addMessage', async (req, res) => {
     try {
-        const newMessage = await messageModel.addMessage(senderId, receiverId, text);
-        res.status(200).json({ message: 'Message sent successfully', data: newMessage });
+        const { senderId, receiverId, text } = req.body;  // Extract data from request 
+
+        const newMessage = new messageModel({
+            sender: senderId,
+            receiver: receiverId,
+            text: text,
+        });
+        
+        await newMessage.save();
+
+        res.status(200).json({ message: 'Message added successfully', data: newMessage });
     } catch (error) {
-        res.status(500).json({ message: 'Error sending message', error: error.message });
+        res.status(500).json({ error: error.message });
     }
 });
+
 
 app.post("/login", (req, res) =>{ // API endpoint
     const {name, pw} = req.body;
