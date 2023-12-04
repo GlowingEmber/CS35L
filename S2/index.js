@@ -10,16 +10,22 @@ app.use(cors())
 
 mongoose.connect("mongodb+srv://max09lui:T4XEs0OHoUJIcJGF@cluster0.kcdmgrl.mongodb.net/?retryWrites=true&w=majority")
 
-/*app.get('/getConversation/:userId1/:userId2', async (req, res) => {
-    const { userId1, userId2 } = req.params;
+
+app.get('/getConversation/:userId1/:userId2', async (req, res) => {
     try {
+        const { userId1, userId2 } = req.params;
+        
         const conversation = await messageModel.getConversation(userId1, userId2);
-        res.status(200).json({ message: 'Conversation retrieved successfully', data: conversation });
+
+        if (conversation) {
+            res.status(200).json({ message: 'Conversation retrieved successfully', data: conversation });
+        } else {
+            res.status(404).json({ message: 'Conversation not found' });
+        }
     } catch (error) {
-        res.status(500).json({ message: 'Error retrieving conversation', error: error.message });
+        res.status(500).json({ error: error.message });
     }
 });
-*/
 
 app.post('/addMessage', async (req, res) => {
     try {
