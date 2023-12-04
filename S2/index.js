@@ -2,7 +2,7 @@ const express = require("express")
 const mongoose = require("mongoose")
 const cors = require("cors")
 const UserModel = require('./models/user')
-const messageModel = require('./models/message')
+const MessageModel = require('./models/message')
 
 const app = express()
 app.use(express.json())
@@ -15,7 +15,7 @@ app.get('/getConversation/:userId1/:userId2', async (req, res) => {
     try {
         const { userId1, userId2 } = req.params;
         
-        const conversation = await messageModel.getConversation(userId1, userId2);
+        const conversation = await MessageModel.getConversation(userId1, userId2);
 
         if (conversation) {
             res.status(200).json({ message: 'Conversation retrieved successfully', data: conversation });
@@ -31,7 +31,7 @@ app.post('/addMessage', async (req, res) => {
     try {
         const { senderId, receiverId, text } = req.body;  // Extract data from request 
 
-        const newMessage = new messageModel({
+        const newMessage = new MessageModel({
             sender: senderId,
             receiver: receiverId,
             text: text,
