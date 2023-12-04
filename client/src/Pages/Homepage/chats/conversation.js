@@ -2,68 +2,83 @@ import React, { useState, useEffect, useRef, useLayoutEffect} from "react";
 import { useParams } from "react-router-dom";
 import './conversation.css'
 import Message from "./message";
+import { CookiesProvider, useCookies } from "react-cookie";
 
+
+import axios from 'axios';
 
 function Conversation(){
 
+  const [cookies, setCookie] = useCookies(["user"]);
   const { friendList } = useParams();
   const decodedFriendList = JSON.parse(decodeURIComponent(friendList));
-  const user = "userName1"
+  const user = cookies.user
   const messagesColumnRef = useRef(null);
   const [message, setMessage] = useState()
-
-  const convodb = {
-      "foo,userName1": [["userName1", "hey there foo!"], ["foo", "hey there usr!"], ["foo", "How are you?"], ["userName1", "I'm great!"]],
-      "bar,userName1": [
-        ["bar", "what's up usr"],
-        ["userName1", "Not much bar"],
-        ["userName1", "how are you"],
-        ["bar", "I'm good, thanks!"],
-        ["bar", "Did you watch the game last night?"],
-        ["userName1", "Yeah, it was intense!"],
-        ["userName1", "Who do you think will win the championship?"],
-        ["bar", "Hard to say, but I'm rooting for my team!"],
-        ["userName1", "They've been playing really well lately."],
-        ["bar", "True, but your team has a strong lineup too."],
-        ["bar", "By the way, have you tried that new restaurant downtown?"],
-        ["userName1", "Not yet, but I heard it's fantastic!"],
-        ["userName1", "Let's plan to go there next weekend."],
-        ["bar", "Sounds like a plan!"],
-        ["userName1", "Great! Looking forward to it."],
-        ["bar", "Me too!"],
-        // Add more messages as needed
-      ],
-      "bar,foo,userName1": [
-        ["bar", "Hello, everyone!"],
-        ["userName1", "Hey there!"],
-        ["foo", "Hi, how's it going?"],
-        ["userName1", "Not bad. What about you, bar?"],
-        ["bar", "I'm doing well, thanks!"],
-        ["foo", "Glad to hear that!"],
-        ["foo", "Anyone up for a game night this weekend?"],
-        ["bar", "Sounds like a plan! What games are we playing?"],
-        ["userName1", "I'm in! How about some board games?"],
-        ["foo", "Sure, board games it is!"],
-        ["bar", "Looking forward to it!"],
-        ["userName1", "Me too!"],
-        ["foo", "Great! See you all on Saturday."],
-      ]
-
-  }
-    
-
-  const friendConversation = convodb[`${[user, ...decodedFriendList].sort().join(',')}`] || [];
+  const [convo, changeConvo] = useState([])
 
 
 
   useEffect(() => {
-    messagesColumnRef.current.scrollTop =
-      messagesColumnRef.current.scrollHeight;
-  }, [friendConversation]);
+    getConversation();
+    const conversationInterval = setInterval(getConversation, 3000); // Run every 3 seconds
+    messagesColumnRef.current.scrollTop = messagesColumnRef.current.scrollHeight;
 
-  function handleSendMessage(){
-    setMessage("")
+    return () => {
+      clearInterval(conversationInterval); // Clear the interval when the component is unmounted
+    };
+  }, [friendList]);
+
+
+
+  async function handleSendMessage() {
+    const senderId = cookies.user;
+  
+    try {
+      const response = await axios.get(`http://localhost:3001/getUserId?name=${decodedFriendList[0]}`);
+  
+      const receiverId = response.data.id;
+      const text = message;
+  
+      try {
+        const sendMessageResponse = await axios.post('http://localhost:3001/sendMessage', {
+          senderId,
+          receiverId,
+          text,
+        });
+  
+        console.log(sendMessageResponse.data); // Assuming the server responds with a success message
+      } catch (error) {
+        console.error('Error sending message:', error.response.data.message);
+      }
+      setMessage("");
+      getConversation();
+    } catch (error) {
+      console.error('Error getting receiverId:', error.response.data.message);
+    }
   }
+
+  const getConversation = async () => {
+    console.log("getting convo")
+    console.log(friendList)
+    const senderId = cookies.user
+    try {
+      const response = await axios.get(`http://localhost:3001/getUserId?name=${decodedFriendList[0]}`);
+      const receiverId = response.data.id;
+  
+      try {
+        const response = await axios.get(`http://localhost:3001/getConversation/${senderId}/${receiverId}`);
+        console.log(response.data.data)
+        changeConvo(response.data.data)
+      } catch (error) {
+        console.error('Error retrieving conversation:', error.response ? error.response.data : error.message);
+        changeConvo([])
+      }
+    } catch (error) {
+      console.error('Error getting receiverId:', error.response.data.message);
+      changeConvo([])
+    }
+  };
 
 
   return (
@@ -71,10 +86,10 @@ function Conversation(){
       <h1>Conversation with {decodedFriendList.join(', ')}:</h1>
       <div id="conversation">
         <div id = "conversationMessages" ref = {messagesColumnRef}>
-          {friendConversation.map(([sender, text], index) => {
-            const showName = ((index > 0) && (friendConversation[index-1][0] === sender))
+          {convo.map((dict, index) => {
+            const showName = ((index > 0) && (convo[index-1].sender === dict.sender))
             return (
-                <Message text={text} side={sender === user ? 'right' : 'left'} first = {!showName} user = {sender}/>
+                <Message text={dict.text} side={dict.sender === user ? 'right' : 'left'} first = {!showName} user = {dict.sender}/>
             );
           })}
         </div>

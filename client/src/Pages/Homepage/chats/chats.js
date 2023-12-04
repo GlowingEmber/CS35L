@@ -3,7 +3,7 @@ import { Link, Outlet } from 'react-router-dom';
 import './chats.css'
 
 function Chats() {
-  const [myChats, setMyChats] = useState([["foo"], ["bar"], ["bar", "foo"]]);
+  const [myChats, setMyChats] = useState([["isaacpinto1"], ["red"], ["pauleggert"]]);
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [showModal, setShowModal] = useState(false);
 

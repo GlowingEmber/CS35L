@@ -27,16 +27,30 @@ const conversationSchema = new mongoose.Schema({
     messages: [messageSchema]
 });
 
-const conversationModel = mongoose.model("Conversations", conversationSchema);
-
 //Addmessages
 async function addMessage(senderId, receiverId, text) {
-    const conversation = await conversationModel.findOneAndUpdate(
-        { participants: { $all: [senderId, receiverId] } },
-        { $push: { messages: { sender: senderId, receiver: receiverId, text: text } } },
-        { new: true, upsert: true }
-    );
-    return conversation;
+    // Check for an existing conversation
+    const existingConversation = await conversationModel.findOne({
+      participants: { $all: [senderId, receiverId] },
+    });
+  
+    if (existingConversation) {
+      // If conversation exists, add a new message to it
+      existingConversation.messages.push({ sender: senderId, receiver: receiverId, text: text });
+      const updatedConversation = await existingConversation.save();
+      console.log("Message added to existing conversation");
+      return updatedConversation;
+    } else {
+      // If conversation doesn't exist, create a new one
+      const newConversation = new conversationModel({
+        participants: [senderId, receiverId],
+        messages: [{ sender: senderId, receiver: receiverId, text: text }],
+      });
+  
+      const savedConversation = await newConversation.save();
+      console.log("New conversation and message created");
+      return savedConversation;
+    }
 }
 
 async function getConversation(userId1, userId2) {
@@ -44,4 +58,6 @@ async function getConversation(userId1, userId2) {
     return conversation ? conversation.messages : [];
 }
 
+
+const conversationModel = mongoose.model("Conversations", conversationSchema);
 module.exports = { addMessage, getConversation };
