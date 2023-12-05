@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema({
     pw: String,
     color: String,
     count: Number,
-    count: Number,
+    // count: Number,
     bio: {
         type: String,
         default: 'Enter Bio Here ' // Set your default value here
