@@ -219,7 +219,6 @@ app.get('/getUserId', async (req, res) => {
         res.status(500).json(error);
     }
 });
-});
 
 app.get('/getUserId', async (req, res) => {
     try {
