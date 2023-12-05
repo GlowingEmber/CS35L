@@ -59,16 +59,18 @@ function Conversation(){
   }
 
   const getConversation = async () => {
-    console.log("getting convo")
-    console.log(friendList)
-    const senderId = cookies.user
+    console.log("Fetching conversation...")
+    const senderId = cookies.user;
     try {
       const response = await axios.get(`http://localhost:3001/getUserId?name=${decodedFriendList[0]}`);
       const receiverId = response.data.id;
+      if(receiverId === cookies.user){
+        changeConvo([])
+      return;
+      }
   
       try {
         const response = await axios.get(`http://localhost:3001/getConversation/${senderId}/${receiverId}`);
-        console.log(response.data.data)
         changeConvo(response.data.data)
       } catch (error) {
         console.error('Error retrieving conversation:', error.response ? error.response.data : error.message);
