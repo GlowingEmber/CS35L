@@ -124,22 +124,23 @@ function Profile(){
                 </div>
                 {displayedId === cookies.user ?
                 <>
-                    <p>pic source: {profilePicture}</p>
-                    <p>Username: {name}</p>
                     <p>Bio: {bio}</p>
                     <div>
                         <p style={{display:"inline"}}>Change Bio: </p>
                         <input value = {newBio} onChange={(e) => setNewBio(e.target.value)}></input>
                         <button onClick={changeBio}>Submit Change</button>
                     </div>
+                    <div>
+                        <p style={{ display: 'inline' }}>Change PF Picture: </p>
+                        <input value={newprofilePicture} onChange={(e) => setNewProfilePicture(e.target.value)}></input>
+                        <button onClick={changePicture}>Submit Change</button>
+                    </div>
                 </>
                 :
                 <>
-                <p>Bio: {bio}</p></>
+                <p>Bio: {bio}</p>
+                </>
                 }
-                <p style={{ display: 'inline' }}>Change PF Picture: </p>
-                <input value={newprofilePicture} onChange={(e) => setNewProfilePicture(e.target.value)}></input>
-                <button onClick={changePicture}>Submit Change</button>
             </>
             
         }
