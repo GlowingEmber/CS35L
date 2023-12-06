@@ -1,85 +1,84 @@
 # Web Messaging Application
-Welcome to the Web Messaging Application! This web-based chat application is designed to provide you with a real-time chat experience with three main features and user login authentication.
 
-**Date**: November 00, 2023
+###### Ethan Hopkins, Isaac Pinto, Michael Lui, Victoria Yu
+###### 6 December 2023
+
+## Introduction
+
+This group project was created as the final submission for
+CS35L in Fall of 2023. It is a full stack messaging app that
+allows users to create profiles with a profile picture and bio, add/remove friends via a simple request system, and chat with their friends in real-time.
 
 ## Table of Contents
 
-- [Basic Features](#basic-features)
+- [Basic Requirements](#basic-requirements)
 - [Three Distinct Features](#three-distinct-features)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Running the Application](#running-the-application)
 - [Usage](#usage)
-- [User Authentication](#user-authentication)
-- [Demo](#demo)
-- [Contributing](#contributing)
-- [License](#license)
 
 
-## Basic Features
+## Basic Requirements
 
-**Real-Time Chat**: You can engage in real-time conversations with other users. Messages are displayed instantly as they are sent, creating a seamless chatting experience.
+**Dynamic Data**: Several aspects of our webapp involves the display of dynamic data. This includes a user's profile picture/bio, the pending and incoming friend requests of a user, the user's friends, and the chat history between a user and their friends
 
-**Message History**: The application stores your chat history, so you can access previous conversations at any time.
+**Uploading Data**: Users can upload custom bios and profile pictures to customise their profile (which is viewable by other users). Additionally, messages sent in the client are stored in the server.
 
-**User Authentication**: The application has a user login system, ensuring that only authenticated users can access and use the chat features.
+**Searching Through Server-Side Data**: In order to display a user's profile, or the chat history between two users, the webapp must search through the server's data and retrieve the appropriate profile data/messages to the client.
+
+**Security Features**: The application requires a username/password registration/login to access the app. Users will be automatically redirected to the login page if the browser detects that they are not logged in.
 
 ## Three Distinct Features
 
-**first**: 
+**First**: Being a messaging app, the first distinct feature is the ability to send/receive messages in real time. These messages are displayed with the user's name, with appropriate styling based on sender/user like in a real messaging app
 
-**second**: 
+**second**: Related to messaging is the ability to manage and change a list of friends. Users are able to send requests to other users, and are able to view a list of incoming requests from other users. Using this list, users are able to accept/deny these requests. Users are also able to view their pending (outgoing) friend requests, and cancel them. Additionally, users can decide to remove a friend at a later time if they are already friends. There is also checks to ensure users cannot add themselves or add someone they are already friends with
 
-**third**: 
+**third**: Lastly, users have custom profiles which can be viewed by their friends in the 'friends' tab. This profile will display a custom bio, and profile picture which is stored as dynamic data.
 
 ## Getting Started
 
 Follow these instructions to get the Web Chat Application up and running on your local machine.
 
 ### Prerequisites
+- [Node.js](https://nodejs.org/en/download/)
+- [MongoDB](https://www.mongodb.com/try/download/community)
 
 ### Installation
 
+1. **Node.js Dependencies:**
+   - Once Node.js has been installed, run the following commands in both the 'client' and 'server' directories to download the necessary dependencies:
+     ```bash
+     npm install
+     ```
+
+2. **MongoDB:**
+   - If MongoDB is not already installed, download and install it from [MongoDB Community Server](https://www.mongodb.com/try/download/community).
+   - Set up a MongoDB Atlas account if you don't have one already.
+   - Create a cluster and obtain the MongoDB connection URI.
+   
+3. **Configure MongoDB URI:**
+   - In the 'server' directory, create a `.env` file.
+   - Add the following line to the `.env` file, replacing `<your-mongodb-uri>` with your actual MongoDB URI:
+     ```plaintext
+     MONGODB_URI=<your-mongodb-uri>
+     ```
+   - Save the `.env` file.
+
 ### Running the Application
 
-To start the application, follow these steps:
-
-	Start the development server:
- 
-	Open a web browser and go to http://localhost:3000 to access the chat application.
+In both the 'client' and 'server' directories, run 'npm run start' to run both the client and server respectively. The webapp should open in your browser.
 
 ## Usage
 
-**Log In**: Please use your username and password to log in.
+**Log In**: Users must register a username/password, and then log in to use the app.
 
-**Real-Time Chat**: Once logged in, you can start chatting with other users. Messages are sent and received in real-time.
+**Navigation**: Users are able to navigate the app and log out using the navigation bar at the top of the page.
 
-**Message History**: Your chat history will be available for reference, and you can scroll through previous messages.
+**Profile**: Users can set a custom bio as well as uploading an image URL for their profile picture in the 'profile' tab.
 
-## User Authentication
+**Friends**: To start chatting with other users, users must first add some friends. Users are able to do this in the 'friends' tab, and will be able to view their pending (outgoing) friend requests. In this tab, users can also accept/deny incoming friend requests, as well as view the profile of their friends.
 
-The user login authentication feature ensures that only registered users can access the chat application. Passwords are securely stored using industry-standard encryption techniques.
-
-## Contributing
-
-We welcome contributions from the XXX. If you would like to contribute to the project, please follow our contribution guidelines.
-
-## License
-
-This project is licensed under the XXX License - see the LICENSE file for details.
-
-
-
-
-
-
-
-
-
-
-
-
-
----
+**Chats**: In the 'chat' tab, users are able to message any of their friends.
