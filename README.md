@@ -32,11 +32,11 @@ allows users to create profiles with a profile picture and bio, add/remove frien
 
 ## Three Distinct Features
 
-**First**: Being a messaging app, the first distinct feature is the ability to send/receive messages in real time. These messages are displayed with the user's name, with appropriate styling based on sender/user like in a real messaging app
+**Messaging**: Being a messaging app, the first distinct feature is the ability to send/receive messages in real time. These messages are displayed with the user's name, with appropriate styling based on sender/user like in a real messaging app
 
-**second**: Related to messaging is the ability to manage and change a list of friends. Users are able to send requests to other users, and are able to view a list of incoming requests from other users. Using this list, users are able to accept/deny these requests. Users are also able to view their pending (outgoing) friend requests, and cancel them. Additionally, users can decide to remove a friend at a later time if they are already friends. There is also checks to ensure users cannot add themselves or add someone they are already friends with
+**Friends**: Related to messaging is the ability to manage and change a list of friends. Users are able to send requests to other users, and are able to view a list of incoming requests from other users. Using this list, users are able to accept/deny these requests. Users are also able to view their pending (outgoing) friend requests, and cancel them. Additionally, users can decide to remove a friend at a later time if they are already friends. There is also checks to ensure users cannot add themselves or add someone they are already friends with
 
-**third**: Lastly, users have custom profiles which can be viewed by their friends in the 'friends' tab. This profile will display a custom bio, and profile picture which is stored as dynamic data.
+**Profiles**: Lastly, users have custom profiles which can be viewed by their friends in the 'friends' tab. This profile will display a custom bio, and profile picture which is stored as dynamic data.
 
 ## Getting Started
 
