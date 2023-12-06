@@ -138,7 +138,6 @@ app.post('/sendFriendRequest', (req, res) => {
             .then(fReq => 
                 res.status(200).json({ status: "Friend request sent", friendRequest: fReq}))
             .catch(err => res.json(err))
-    // const {friender, recipient, accepted, timestamp} = req.body;
 
     /*
     FriendReqModel.find({
