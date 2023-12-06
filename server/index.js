@@ -6,6 +6,9 @@ const MessageModel = require('./models/messageModel')
 const { addMessage, getConversation } = require('./models/messageModel')
 const FriendReqModel = require('./models/friendreq')
 const axios = require('axios')
+const dotenv = require('dotenv'); // Add this line
+
+dotenv.config(); // Add this line
 
 const app = express()
 
@@ -14,8 +17,7 @@ const url = 'http://localhost:' + port + "/"
 app.use(express.json())
 app.use(cors())
 
-mongoose.connect("mongodb+srv://max09lui:T4XEs0OHoUJIcJGF@cluster0.kcdmgrl.mongodb.net/?retryWrites=true&w=majority")
-
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true }); // Update this line
 
 
 
