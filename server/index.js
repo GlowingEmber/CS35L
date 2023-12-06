@@ -125,6 +125,24 @@ app.get('/getOutgoingFriendRequests/:user', async (req, res) => {
     }
 });
 
+app.put('/acceptFriendRequest', async (req, res) => {
+    try {
+        const {friender, recipient} = req.body;
+        const update = {accepted: true};
+        // Use Mongoose to update the bio field for the specified user
+        const updatedUser = await FriendReqModel.findOneAndUpdate({
+            $or: [
+                {friender: friender, recipient: recipient, accepted: false},
+                {friender: recipient, recipient: friender, accepted: false}
+            ]
+        },
+        update
+        );
+        res.json(updatedUser);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
 
 ////////////////////////////
 //// WIP BELOW
