@@ -85,7 +85,7 @@ function Conversation(){
 
   return (
     <>
-      <h1>Conversation with {decodedFriendList.join(', ')}:</h1>
+      <h3>Conversation with {decodedFriendList.join(', ')}:</h3>
       <div id="conversation">
         <div id = "conversationMessages" ref = {messagesColumnRef}>
           {convo.map((dict, index) => {
@@ -96,7 +96,7 @@ function Conversation(){
           })}
         </div>
         <input onChange={(e) => setMessage(e.target.value)} value = {message}></input>
-        <button onClick={handleSendMessage}>Send</button>
+        <button className="blue-button" onClick={handleSendMessage}>Send</button>
       </div>
     </>
   );

@@ -29,7 +29,6 @@
   }
 
   .close-button {
-    background-color: lightcoral;
     color: black;
     border: 1px solid black;
     cursor: pointer;
@@ -48,14 +47,13 @@
   }
 
 
-  .blue-button {
+.blue-button {
     padding: 10px;
     color: black; /* Set your desired text color */
     text-decoration: none;
     border: none;
     border-radius: 5px;
     transition: all 0.3s ease; /* Add a smooth transition effect */
-    background-color: white;
     background-color: lightblue;
 
     &:hover {
@@ -63,4 +61,40 @@
         color: white; /* Set your desired text color on hover */
         transform: scale(1.05); /* Grow slightly on hover */
     }
+}
+
+.confirm-button{
+    margin-right: 5px;
+}
+
+.friend-link {
+    text-decoration: none; /* Remove default underline */
+    color: black; /* Set the initial text color */
+    transition: all 0.3s ease; /* Add smooth transition for color and transform */
+    background: lightblue;
+    border-radius: 8px;
+    padding:5px;
+    display: inline-block;
+
+    &:hover {
+        transform: scale(1.05); /* Scale text on hover */
+      }
+}
+
+.friend-listing{
+    margin-bottom: 5px;
+}
+
+#friends-container{
+    display:flex;
+    flex-direction: row;
+}
+
+#friends-container{
+    display:flex;
+    flex-direction: row;
+}
+
+#side-profile{
+    margin-left: 100px;
 }

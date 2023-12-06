@@ -255,80 +255,84 @@ function Friends() {
 
 
   return (
-    <>
-      <h2>Friends:</h2>
-      <ul>
-        {myFriends.map((friend, index) => (
-          <React.Fragment key={index}>
-            <button className='close-button' onClick={() => openConfirmationModal(friend)} ></button>
-            <Link to={`/home/friends/${encodeURIComponent(JSON.stringify(friend))}`}>
-              {friend}
-            </Link>
-            <br />
-          </React.Fragment>
-        ))}
-      </ul>
-      
-      {/* Confirmation Modal */}
-      {confirmationModal && (
-        <div className="modal-overlay" onClick={() => setConfirmationModal(false)}>
-          <div className="modal-container">
-            <p>Are you sure you want to remove {selectedFriendForDeny} as a friend?</p>
-            <button className='blue-button' onClick={confirmDenyRequest}>Yes</button>
-            <button className='blue-button' onClick={closeConfirmationModal}>No</button>
+    <div id="friends-container">
+      <div>
+        <h2>Friends:</h2>
+        <ul>
+          {myFriends.map((friend, index) => (
+            <div className='friend-listing' key={index}>
+              <button className='close-button' onClick={() => openConfirmationModal(friend)} ></button>
+              <Link className='friend-link' to={`/home/friends/${encodeURIComponent(JSON.stringify(friend))}`}>
+                {friend}
+              </Link>
+            </div>
+          ))}
+        </ul>
+        
+        {/* Confirmation Modal */}
+        {confirmationModal && (
+          <div className="modal-overlay" onClick={() => setConfirmationModal(false)}>
+            <div className="modal-container">
+              <p>Are you sure you want to remove {selectedFriendForDeny} as a friend?</p>
+              <button className='blue-button confirm-button' onClick={confirmDenyRequest}>Yes</button>
+              <button className='blue-button' onClick={closeConfirmationModal}>No</button>
+            </div>
           </div>
+        )}
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <p style={{ marginRight: '8px' }}>Add Friend:</p>
+          <input
+            type="text"
+            value={newFriendName}
+            onChange={(e) => setNewFriendName(e.target.value)}
+            style={{ marginRight: '8px' }}
+          />
+          <button className='blue-button' onClick={() => addFriend(newFriendName)}>Add</button>
+          {showError()}
         </div>
-      )}
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <p style={{ marginRight: '8px' }}>Add Friend:</p>
-        <input
-          type="text"
-          value={newFriendName}
-          onChange={(e) => setNewFriendName(e.target.value)}
-          style={{ marginRight: '8px' }}
-        />
-        <button className='blue-button' onClick={() => addFriend(newFriendName)}>Add</button>
-        {showError()}
+        {/* Friend Requests Modal */}
+        {showFriendRequests && (
+          <div className="friend-requests-modal">
+            <h2>Friend Requests</h2>
+            <ul>
+              {friendRequests.map((request, index) => (
+                <li key={index}>
+                  {request + ' '}
+                  <button className='blue-button' onClick={() => acceptRequest(request)}>Accept</button>
+                  <button className='blue-button' onClick={() => denyRequest(request)}>Deny</button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <button className='blue-button' onClick={() => setShowFriendRequests(prevState => !prevState)}>
+          {showFriendRequests ? "Close" : "View Friend Requests"}
+        </button>
+        <br/>
+        <br/>
+        {showSentRequests && (
+          <div className="friend-requests-modal">
+            <h2>Sent Requests</h2>
+            <ul>
+              {sentRequests.map((request, index) => (
+                <li key={index}>
+                  {request + ' '}
+                  <button className='blue-button' onClick={() => denyRequest(request)}>Cancel</button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <button className='blue-button' onClick={() => setShowSentRequests(prevState => !prevState)}>
+          {showSentRequests ? "Close" : "View Pending Requests"}
+        </button>
       </div>
-      {/* Friend Requests Modal */}
-      {showFriendRequests && (
-        <div className="friend-requests-modal">
-          <h2>Friend Requests</h2>
-          <ul>
-            {friendRequests.map((request, index) => (
-              <li key={index}>
-                {request + ' '}
-                <button className='blue-button' onClick={() => acceptRequest(request)}>Accept</button>
-                <button className='blue-button' onClick={() => denyRequest(request)}>Deny</button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      <button className='blue-button' onClick={() => setShowFriendRequests(prevState => !prevState)}>
-        {showFriendRequests ? "Close" : "View Friend Requests"}
-      </button>
-      <br/>
-      <br/>
-      {showSentRequests && (
-        <div className="friend-requests-modal">
-          <h2>Sent Requests</h2>
-          <ul>
-            {sentRequests.map((request, index) => (
-              <li key={index}>
-                {request + ' '}
-                <button className='blue-button' onClick={() => denyRequest(request)}>Cancel</button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      <button className='blue-button' onClick={() => setShowSentRequests(prevState => !prevState)}>
-        {showSentRequests ? "Close" : "View Pending Requests"}
-      </button>
+      <div id = "side-profile">
       <Outlet />
-    </>
+      </div>
+    </div>
   );
 }
 
 export default Friends;
+

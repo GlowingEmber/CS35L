@@ -95,7 +95,11 @@ function Chats() {
           </React.Fragment>
         ))}
       </ul>
-      {/*<button onClick={handleNewChat}>New Chat</button>
+      <br/>
+      {/*
+      Code to create groupchats:
+
+      <button onClick={handleNewChat}>New Chat</button>
       {showModal && (
         <>
           <div className="overlay" onClick={() => setShowModal(false)}></div>
