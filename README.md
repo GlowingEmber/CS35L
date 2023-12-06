@@ -56,8 +56,8 @@ Follow these instructions to get the Web Chat Application up and running on your
 
 2. **MongoDB:**
    - If MongoDB is not already installed, download and install it from [MongoDB Community Server](https://www.mongodb.com/try/download/community).
-   - Set up a MongoDB Atlas account if you don't have one already.
-   - Create a cluster and obtain the MongoDB connection URI.
+   - Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) and set up an account.
+   - Create a cluster and obtain the MongoDB connection URI from the cluster settings.
    
 3. **Configure MongoDB URI:**
    - In the 'server' directory, create a `.env` file.
