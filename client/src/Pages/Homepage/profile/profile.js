@@ -4,7 +4,7 @@ import './profile.css'
 import axios from 'axios';
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { useEffect } from 'react';
-import { CookiesProvider, useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 import { useParams } from "react-router-dom";
 
 function Profile(){
