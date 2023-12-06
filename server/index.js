@@ -138,6 +138,9 @@ app.put('/acceptFriendRequest', async (req, res) => {
         },
         update
         );
+        if (!updatedUser) {
+            return res.status(404).json({ error: 'Incoming friend request not found' });
+        }
         res.json(updatedUser);
     } catch (error) {
         res.status(500).json(error);
