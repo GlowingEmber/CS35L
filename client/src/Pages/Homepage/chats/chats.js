@@ -1,13 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import './chats.css'
+import { useCookies } from 'react-cookie';
+import axios from 'axios';
 
 function Chats() {
+  const [cookies, setCookie] = useCookies(["user"]);
   const [myChats, setMyChats] = useState([["isaacpinto1"], ["red"], ["pauleggert"]]);
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
-  const friends = ["isaacpinto1", "eggert", "red"]
+  const [friends, setFriends] = useState([])
+
+  const getFriends = async () => {
+    const user = cookies.user;
+    try {
+      const response = await axios.get(`http://localhost:3001/getFriendsList/${user}`);
+      console.log(response.data.friends)
+      const friendRequests = response.data.friends;
+
+      // Iterate over each dictionary and get user data
+      const userDataPromises = friendRequests.map(async (request) => {
+        const friendId = request.friender === cookies.user ? request.recipient : request.friender;
+        const userDataResponse = await axios.get(`http://localhost:3001/getUserData`, {
+          params: { _id: friendId },
+        });
+        return userDataResponse.data;
+      });
+
+      // Wait for all promises to resolve
+      const userDataArray = await Promise.all(userDataPromises);
+
+      const userNames = userDataArray.map((data) => data.name)
+
+      // Update state with the collected user data
+      const friends = userNames.map((data) => [data])
+      setFriends(friends);
+      console.log(friends);
+    } catch (error) {
+      console.error('Error getting incoming requests:', error.response ? error.response.data.message : error.message);
+    }
+  }
+
+  useEffect(()=>{
+    getFriends();
+  }, [])
 
   const handleNewChat = () => {
     // Open the modal to select friends
@@ -49,7 +86,7 @@ function Chats() {
     <>
       <h2>Chats:</h2>
       <ul>
-        {myChats.map((friendList, index) => (
+        {friends.map((friendList, index) => (
           <React.Fragment key={index}>
             <Link to={`/home/chats/${encodeURIComponent(JSON.stringify(friendList))}`}>
               {friendList.join(', ')}
@@ -58,7 +95,7 @@ function Chats() {
           </React.Fragment>
         ))}
       </ul>
-      <button onClick={handleNewChat}>New Chat</button>
+      {/*<button onClick={handleNewChat}>New Chat</button>
       {showModal && (
         <>
           <div className="overlay" onClick={() => setShowModal(false)}></div>
@@ -81,8 +118,7 @@ function Chats() {
             <button onClick={handleCreateChat}>Create Chat</button>
           </div>
         </>
-      )}
-      <br />
+      )}*/}
       <Outlet />
     </>
   );
