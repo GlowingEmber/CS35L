@@ -31,7 +31,7 @@ function Login({setCookie2}) {
       return;
     }
     axios.post('http://localhost:3001/login', {name, pw})
-    .then(result => {console.log(result)
+    .then(result => {
         if(result.data.status === "Success"){
           setCookie("user", result.data.id, { path: "/" })
           if(result.data.name !== ''){

@@ -93,7 +93,6 @@ app.get('/getConversation/:userId1/:userId2', async (req, res) => {
 
 
 app.post('/sendMessage', async (req, res) => {
-    console.log(req.body)
     const { senderId, receiverId, text } = req.body;
     try {
         const newMessage = await addMessage(senderId, receiverId, text);
@@ -192,7 +191,6 @@ app.put('/acceptFriendRequest', async (req, res) => {
 
 app.post('/sendFriendRequest', (req, res) => {
     const {friender, recipient} = req.body;
-    console.log(friender, recipient)
     FriendReqModel.findOne({
         $or: [
             {friender: friender, recipient: recipient},

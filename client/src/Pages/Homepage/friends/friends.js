@@ -47,7 +47,6 @@ function Friends() {
           friender,
           recipient
         });
-        console.log("friend added!")
       } catch (error) {
         console.error('Error accepting friend:', error);
       }
@@ -71,7 +70,6 @@ function Friends() {
         const response = await axios.delete('http://localhost:3001/deleteFriend', {
           data: { person1, person2 },
         });
-        console.log(response.data); // Assuming the server responds with a success message
       } catch (error) {
         console.error('Error denying request:', error);
       }
@@ -117,7 +115,6 @@ function Friends() {
           recipient
         });
 
-        console.log(addFriendResponse.data); // Assuming the server responds with a success message
         setErr("sent")
       } catch (error) {
         console.error('Error adding friend:', error.response.data.message);
@@ -151,7 +148,6 @@ function Friends() {
 
       // Update state with the collected user data
       setSentRequests(userNames);
-      console.log(userNames)
 
     } catch (error) {
       console.error('Error getting sent requests:', error.response ? error.response.data.message : error.message);
@@ -179,7 +175,6 @@ function Friends() {
 
       // Update state with the collected user data
       setFriendRequests(userNames);
-      console.log(userNames);
 
     } catch (error) {
       console.error('Error getting incoming requests:', error.response ? error.response.data.message : error.message);
@@ -222,7 +217,6 @@ function Friends() {
     const user = cookies.user;
     try {
       const response = await axios.get(`http://localhost:3001/getFriendsList/${user}`);
-      console.log(response.data.friends)
       const friendRequests = response.data.friends;
 
       // Iterate over each dictionary and get user data
@@ -241,7 +235,6 @@ function Friends() {
 
       // Update state with the collected user data
       setMyFriends(userNames);
-      console.log(userNames);
     } catch (error) {
       console.error('Error getting incoming requests:', error.response ? error.response.data.message : error.message);
     }

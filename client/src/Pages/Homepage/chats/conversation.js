@@ -47,7 +47,6 @@ function Conversation(){
           text,
         });
   
-        console.log(sendMessageResponse.data); // Assuming the server responds with a success message
       } catch (error) {
         console.error('Error sending message:', error.response.data.message);
       }

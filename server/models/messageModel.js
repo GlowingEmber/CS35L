@@ -38,7 +38,6 @@ async function addMessage(senderId, receiverId, text) {
       // If conversation exists, add a new message to it
       existingConversation.messages.push({ sender: senderId, receiver: receiverId, text: text });
       const updatedConversation = await existingConversation.save();
-      console.log("Message added to existing conversation");
       return updatedConversation;
     } else {
       // If conversation doesn't exist, create a new one
@@ -48,7 +47,6 @@ async function addMessage(senderId, receiverId, text) {
       });
   
       const savedConversation = await newConversation.save();
-      console.log("New conversation and message created");
       return savedConversation;
     }
 }

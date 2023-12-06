@@ -16,7 +16,6 @@ function Chats() {
     const user = cookies.user;
     try {
       const response = await axios.get(`http://localhost:3001/getFriendsList/${user}`);
-      console.log(response.data.friends)
       const friendRequests = response.data.friends;
 
       // Iterate over each dictionary and get user data
@@ -36,7 +35,6 @@ function Chats() {
       // Update state with the collected user data
       const friends = userNames.map((data) => [data])
       setFriends(friends);
-      console.log(friends);
     } catch (error) {
       console.error('Error getting incoming requests:', error.response ? error.response.data.message : error.message);
     }
@@ -88,7 +86,7 @@ function Chats() {
       <ul>
         {friends.map((friendList, index) => (
           <React.Fragment key={index}>
-            <Link to={`/home/chats/${encodeURIComponent(JSON.stringify(friendList))}`}>
+            <Link className='friend-linkc' to={`/home/chats/${encodeURIComponent(JSON.stringify(friendList))}`}>
               {friendList.join(', ')}
             </Link>
             <br />

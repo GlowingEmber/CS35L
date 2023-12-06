@@ -43,7 +43,6 @@ function Profile(){
         const fetchData = async () => {
             try {
                 const searchId = await getUserId(decodedId);
-                console.log(searchId)
                 const response = await axios.get(`http://localhost:3001/getUserData?_id=${searchId}`);
                 /*Query is passed as a dictionary. Names used determine the keys for the dictionary
                 To have multiple: ?_id=${searchId}&param1=${queryParam1}&param2=${queryParam2} */
@@ -65,7 +64,6 @@ function Profile(){
           // Your logic for changing the new parameter
           // Example: updating parameter using axios
           const response = await axios.put(`http://localhost:3001/updateParameter/${displayedId}`, { parameter: newParameter });
-          console.log(response.data); // Log the updated data
           // Update state or perform other actions based on the response
           setNewParameter(''); // Reset the input field
         } catch (error) {
@@ -76,7 +74,6 @@ function Profile(){
     const changeBio = async () => {
         try {
             const response = await axios.put(`http://localhost:3001/updateUserBio/${displayedId}`, { bio: newBio });
-            console.log(response.data); // The updated user data (including the new bio)
             setBio(response.data.bio);
             setNewBio('');
         } catch (error) {
@@ -87,7 +84,6 @@ function Profile(){
     const changePicture = async () => {
         try {
             const response = await axios.put(`http://localhost:3001/updateProfilePicture/${displayedId}`, { profilepicture: newprofilePicture });
-            console.log(response.data); // The updated user data (including the new count)
             setNewProfilePicture('')
             setProfilePicture(response.data.picture)
           } catch (error) {
