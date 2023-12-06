@@ -41,6 +41,8 @@ function Welcome(){
         <>
             <h2>Hello, {name}!</h2>
             <p>This is our messaging app. Visit your profile or your list of friends from the links above</p>
+            <img src="https://i.imgur.com/M37wZ3Y.png" alt="Example" width="504" height="345" />
+
         </>
         }
         </>
