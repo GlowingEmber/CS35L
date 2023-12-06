@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
+import "./friends.css"
 
 function Friends() {
   const [myFriends, setMyFriends] = useState([]);
@@ -14,6 +15,26 @@ function Friends() {
   const [sentRequests, setSentRequests] = useState([]);
   const [showSentRequests, setShowSentRequests] = useState(false);
 
+  const [err, setErr] = useState(null); 
+
+  const [confirmationModal, setConfirmationModal] = useState(false);
+  const [selectedFriendForDeny, setSelectedFriendForDeny] = useState(null);
+
+  function showError(){
+    if(err === null){
+      return null
+    } else if(err === "self"){
+      return(<p className='error'>Can't add yourself!</p>)
+    } else if(err === "already"){
+      return(<p className='error'>Already friends!</p>)
+    } else if(err === "DNE"){
+      return(<p className='error'>User doesn't exist.</p>)
+    } else if(err === "sent"){
+      return(<p className='success'>Sent!</p>)
+    } else if(err === "pending"){
+      return(<p className='error'>Request already sent.</p>)
+    }
+  }
 
   async function acceptRequest(otherName) {
     const friender = cookies.user;
@@ -59,11 +80,16 @@ function Friends() {
     }
     getSentRequests();
     getIncomingRequests();
+    getFriends();
   }
 
 
 
   async function addFriend(newFriendName) {
+    if(newFriendName === ""){
+      setErr("DNE")
+      return;
+    }
     const friender = cookies.user;
   
     try {
@@ -72,13 +98,18 @@ function Friends() {
       const recipient = response.data.id;
 
       if(recipient === friender){
-        console.log("cant add yourself!")
+        setErr("self")
         return;
       }
       if (myFriends.includes(newFriendName)) {
-        console.log("Already friends!");
+        setErr("already")
         return;
       }
+      if (sentRequests.includes(newFriendName)){
+        setErr("pending")
+        return;
+      }
+      setErr(null)
   
       try {
         const addFriendResponse = await axios.post('http://localhost:3001/sendFriendRequest', {
@@ -87,11 +118,13 @@ function Friends() {
         });
 
         console.log(addFriendResponse.data); // Assuming the server responds with a success message
+        setErr("sent")
       } catch (error) {
         console.error('Error adding friend:', error.response.data.message);
       }
     } catch (error) {
       console.error('Error getting recipient id:', error.response.data.message);
+      setErr("DNE")
     }
     setNewFriendName('');
     getSentRequests();
@@ -153,6 +186,26 @@ function Friends() {
     }
   };
 
+  const openConfirmationModal = (friend) => {
+    setSelectedFriendForDeny(friend);
+    setConfirmationModal(true);
+  };
+
+  const closeConfirmationModal = () => {
+    setSelectedFriendForDeny(null);
+    setConfirmationModal(false);
+  };
+
+  const confirmDenyRequest = () => {
+    if (selectedFriendForDeny) {
+      denyRequest(selectedFriendForDeny);
+      closeConfirmationModal();
+    }
+  };
+
+
+
+
   useEffect(() => {
     if (showSentRequests) {
       getSentRequests();
@@ -207,7 +260,7 @@ function Friends() {
       <ul>
         {myFriends.map((friend, index) => (
           <React.Fragment key={index}>
-            <button onClick={()=>denyRequest(friend)}>X</button>
+            <button className='close-button' onClick={() => openConfirmationModal(friend)} ></button>
             <Link to={`/home/friends/${encodeURIComponent(JSON.stringify(friend))}`}>
               {friend}
             </Link>
@@ -215,6 +268,17 @@ function Friends() {
           </React.Fragment>
         ))}
       </ul>
+      
+      {/* Confirmation Modal */}
+      {confirmationModal && (
+        <div className="modal-overlay" onClick={() => setConfirmationModal(false)}>
+          <div className="modal-container">
+            <p>Are you sure you want to remove {selectedFriendForDeny} as a friend?</p>
+            <button className='blue-button' onClick={confirmDenyRequest}>Yes</button>
+            <button className='blue-button' onClick={closeConfirmationModal}>No</button>
+          </div>
+        </div>
+      )}
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <p style={{ marginRight: '8px' }}>Add Friend:</p>
         <input
@@ -223,9 +287,9 @@ function Friends() {
           onChange={(e) => setNewFriendName(e.target.value)}
           style={{ marginRight: '8px' }}
         />
-        <button onClick={() => addFriend(newFriendName)}>Add</button>
+        <button className='blue-button' onClick={() => addFriend(newFriendName)}>Add</button>
+        {showError()}
       </div>
-      <button onClick={() => setShowFriendRequests(true)}>View Friend Requests</button>
       {/* Friend Requests Modal */}
       {showFriendRequests && (
         <div className="friend-requests-modal">
@@ -234,17 +298,18 @@ function Friends() {
             {friendRequests.map((request, index) => (
               <li key={index}>
                 {request + ' '}
-                <button onClick={() => acceptRequest(request)}>Accept</button>
-                <button onClick={() => denyRequest(request)}>Deny</button>
+                <button className='blue-button' onClick={() => acceptRequest(request)}>Accept</button>
+                <button className='blue-button' onClick={() => denyRequest(request)}>Deny</button>
               </li>
             ))}
           </ul>
-          <button onClick={() => setShowFriendRequests(false)}>Close</button>
         </div>
       )}
+      <button className='blue-button' onClick={() => setShowFriendRequests(prevState => !prevState)}>
+        {showFriendRequests ? "Close" : "View Friend Requests"}
+      </button>
       <br/>
       <br/>
-      <button onClick={() => setShowSentRequests(true)}>View Pending Requests</button>
       {showSentRequests && (
         <div className="friend-requests-modal">
           <h2>Sent Requests</h2>
@@ -252,13 +317,15 @@ function Friends() {
             {sentRequests.map((request, index) => (
               <li key={index}>
                 {request + ' '}
-                <button onClick={() => denyRequest(request)}>Cancel</button>
+                <button className='blue-button' onClick={() => denyRequest(request)}>Cancel</button>
               </li>
             ))}
           </ul>
-          <button onClick={() => setShowSentRequests(false)}>Close</button>
         </div>
       )}
+      <button className='blue-button' onClick={() => setShowSentRequests(prevState => !prevState)}>
+        {showSentRequests ? "Close" : "View Pending Requests"}
+      </button>
       <Outlet />
     </>
   );
