@@ -151,37 +151,45 @@ app.put('/acceptFriendRequest', async (req, res) => {
 //// WIP BELOW
 ////////////////////////////
 
-
-
 app.post('/sendFriendRequest', (req, res) => {
     const {friender, recipient} = req.body;
-    FriendReqModel.create({friender, recipient})
-            .then(fReq => 
-                res.status(200).json({ status: "Friend request sent", friendRequest: fReq}))
-            .catch(err => res.json(err))
-
-    /*
-    FriendReqModel.find({
+    console.log(friender, recipient)
+    FriendReqModel.findOne({
         $or: [
-            {$and: [{friender: req.params.friender},{recipient: req.params.recipient}]},
-            {$and: [{friender: req.params.recipient},{recipient: req.params.friender}]}
+            {friender: friender, recipient: recipient},
+            {friender: recipient, recipient: friender}
         ]
     })
-    .then(user => {
-        if(user) {
-            res.json({
-                status: "Failure",
-                user: null
-            })
-        } else{
-            UserModel.create({name,pw, color, count:0})
-            .then(user => res.json({
-                status: "Success",
-                user: user}))
+    .then(friendship => {
+        if (friendship) {
+            // USER HAS INCOMING FRIEND REQUEST
+            if (!friendship.accepted && friendship.recipient == friender) {
+                axios.put(url + 'acceptFriendRequest', {
+                    friender: friender,
+                    recipient: recipient
+                  })
+                  .then(
+                    res.json({ status: "Success: User " + friender + " has accepted an incoming friend request from " + recipient, friendRequest: friendship})
+                  )
+                  .catch(function (err) {
+                    res.json(err)
+                  });
+            // USER HAS OUTGOING FRIEND REQUEST
+            } else if (!friendship.accepted && friendship.friender == friender) {
+                res.json({ status: "Failure: User " + friender + " already has outgoing friend request to " + recipient})
+            // USERS ARE ALREADY FRIENDS
+            } else {
+                res.json({ status: "Failure: Users " + friender + " and " + recipient + " are already friends"})
+            }
+        // NO FRIENDSHIPS OR FRIEND REQUESTS EXIST
+        } else { 
+            FriendReqModel.create({friender, recipient})
+                    .then(fReq => 
+                        res.status(200).json({ status: "Success: Friend request from " + friender + " sent to " + recipient, friendRequest: fReq}))
             .catch(err => res.json(err))
         }
     })
-    */
+    .catch(err => res.json(err))
 })
 
 /*
