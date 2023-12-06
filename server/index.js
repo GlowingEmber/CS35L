@@ -130,14 +130,13 @@ app.get('/getOutgoingFriendRequests/:user', async (req, res) => {
 //// WIP BELOW
 ////////////////////////////
 
-  
+
+
 app.post('/sendFriendRequest', (req, res) => {
-    const {friender, recipient, timestamp} = req.body;
-    const time_sent = Date.now();
-    FriendReqModel.create({friender, recipient, timestamp:time_sent, accepted:false})
-            .then(fReq => res.json({
-                status: "Success",
-                friendRequest: fReq}))
+    const {friender, recipient} = req.body;
+    FriendReqModel.create({friender, recipient})
+            .then(fReq => 
+                res.status(200).json({ status: "Friend request sent", friendRequest: fReq}))
             .catch(err => res.json(err))
     // const {friender, recipient, accepted, timestamp} = req.body;
 
