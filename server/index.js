@@ -5,12 +5,69 @@ const UserModel = require('./models/user')
 const MessageModel = require('./models/messageModel')
 const { addMessage, getConversation } = require('./models/messageModel')
 const FriendReqModel = require('./models/friendreq')
+const axios = require('axios')
 
 const app = express()
+const port = 3001
+const url = 'http://localhost:' + port + "/"
 app.use(express.json())
 app.use(cors())
 
 mongoose.connect("mongodb+srv://max09lui:T4XEs0OHoUJIcJGF@cluster0.kcdmgrl.mongodb.net/?retryWrites=true&w=majority")
+
+
+
+////////////////////////////
+//// GENERAL
+////////////////////////////
+
+app.post("/login", (req, res) =>{ // API endpoint
+    const {name, pw} = req.body;
+    UserModel.findOne({name:name})
+    .then(user => {
+        if(user) {
+            if(user.pw === pw){
+                res.json(
+                    {status:"Success",
+                    name:user.name,
+                    id: user._id})
+            } else{
+                res.json(
+                    {status:"Wrong Password",
+                    user: null})
+            }
+        } else{
+            res.json(
+                {status:"No User Exists",
+                    user: null}
+            )
+        }
+    })
+})
+
+app.post('/register', (req, res) =>{ // request, response
+    const {name, pw, color} = req.body
+
+    UserModel.findOne({name:name})
+    .then(user => {
+        if(user) {
+            res.json({
+                status: "Failure",
+                user: null
+            })
+        } else{
+            UserModel.create({name,pw, color, count:0})
+            .then(user => res.json({
+                status: "Success",
+                user: user}))
+            .catch(err => res.json(err))
+        }
+    })
+})
+
+////////////////////////////
+//// MESSAGE-RELATED
+////////////////////////////
 
 app.get('/getConversation/:userId1/:userId2', async (req, res) => {
     try {
@@ -40,29 +97,9 @@ app.post('/sendMessage', async (req, res) => {
     }
 });
 
-app.post("/login", (req, res) =>{ // API endpoint
-    const {name, pw} = req.body;
-    UserModel.findOne({name:name})
-    .then(user => {
-        if(user) {
-            if(user.pw === pw){
-                res.json(
-                    {status:"Success",
-                    name:user.name,
-                    id: user._id})
-            } else{
-                res.json(
-                    {status:"Wrong Password",
-                    user: null})
-            }
-        } else{
-            res.json(
-                {status:"No User Exists",
-                    user: null}
-            )
-        }
-    })
-})
+////////////////////////////
+//// FRIENDS-RELATED
+////////////////////////////
 
 app.get('/checkFriends', (req, res) => {
     try {
@@ -147,10 +184,6 @@ app.put('/acceptFriendRequest', async (req, res) => {
     }
 });
 
-////////////////////////////
-//// WIP BELOW
-////////////////////////////
-
 app.post('/sendFriendRequest', (req, res) => {
     const {friender, recipient} = req.body;
     console.log(friender, recipient)
@@ -192,34 +225,10 @@ app.post('/sendFriendRequest', (req, res) => {
     .catch(err => res.json(err))
 })
 
-/*
-app.delete('/deleteFriendRequest/:user_id', async (req, res) => {
-  }); 
-*/
-
-///////////////////////////
-//// END OF WIP
-///////////////////////////
-
-app.post('/register', (req, res) =>{ // request, response
-    const {name, pw, color} = req.body
-
-    UserModel.findOne({name:name})
-    .then(user => {
-        if(user) {
-            res.json({
-                status: "Failure",
-                user: null
-            })
-        } else{
-            UserModel.create({name,pw, color, count:0})
-            .then(user => res.json({
-                status: "Success",
-                user: user}))
-            .catch(err => res.json(err))
-        }
-    })
-})
+// works for both friend requests and accepted friendships
+////////////////////////////
+//// USERPROFILE-RELATED
+////////////////////////////
 
 app.get('/getUserData', async (req, res) => {
     try {
@@ -246,21 +255,6 @@ app.get('/getUserId', async (req, res) => {
         res.status(500).json(error);
     }
 });
-
-app.get('/getUserId', async (req, res) => {
-    try {
-        const { name } = req.query;
-        const query = name ? { name } : {};
-        
-        const user = await UserModel.findOne(query);
-        res.json({
-            id:user._id
-        });
-    } catch (error) {
-        res.status(500).json(error);
-    }
-});
-
 
 app.delete('/deleteDocument/:id', async (req, res) => {
     const { id } = req.params; // Get the ID from the URL parameter
@@ -334,6 +328,9 @@ app.put('/updateProfilePicture/:id', async (req, res) => {
     }
 });
 
-app.listen(3001, () =>{ // Start on this port
+////////////////////////////
+//// OTHER
+////////////////////////////
+
     console.log("server is running")
 })
