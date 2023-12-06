@@ -232,20 +232,6 @@ app.get('/getUserId', async (req, res) => {
     }
 });
 
-app.get('/getUserId', async (req, res) => {
-    try {
-        const { name } = req.query;
-        const query = name ? { name } : {};
-        
-        const user = await UserModel.findOne(query);
-        res.json({
-            id:user._id
-        });
-    } catch (error) {
-        res.status(500).json(error);
-    }
-});
-
 
 app.delete('/deleteDocument/:id', async (req, res) => {
     const { id } = req.params; // Get the ID from the URL parameter
