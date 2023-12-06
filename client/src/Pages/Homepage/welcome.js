@@ -5,7 +5,6 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { CookiesProvider, useCookies } from "react-cookie";
-//import Login from './login';
 
 function Welcome(){
 

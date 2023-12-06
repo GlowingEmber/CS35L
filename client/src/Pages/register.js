@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 import { CookiesProvider, useCookies } from "react-cookie";
+import "./register.css"
+
 
 function Register() {
 
@@ -61,33 +63,37 @@ function Register() {
 
   return (
     <div>
-      <div className = 'login-container'>
+      <div className='login-container'>
         <div className="container">
-        <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <>Name: </>
-        <input 
-          type="text"
-          placeholder="Username"
-          onChange={(e) => setName(e.target.value)} 
-          value={name}>
-        </input>
-        <br></br>
-        <>Password: </>
-        <input 
-          type="password"
-          placeholder="Password"
-          onChange={(e) => setPw(e.target.value)} 
-          value = {pw}>
-        </input>
-        <br></br>
-        {showError()}
-        <input type="submit" value="Register" className="link-button"></input>
-      </form>
-      <Link to="/login" className="link-button">Already have Account? Login</Link>
-    </div>
+          <h2>Register</h2>
+          <form onSubmit={handleSubmit} className="input-container">
+            <label htmlFor="name">Name:</label>
+            <input
+              type="text"
+              id="name"
+              placeholder="Username"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+            />
+            <br />
+            <label htmlFor="pw">Password:</label>
+            <input
+              type="password"
+              id="pw"
+              placeholder="Password"
+              onChange={(e) => setPw(e.target.value)}
+              value={pw}
+            />
+            <br />
+            {showError()}
+            <input type="submit" value="Register" className="link-button" />
+          </form>
+          <Link to="/login" className="link-button">
+            Already have an Account? Login
+          </Link>
         </div>
       </div>
+    </div>
   );
 }
 

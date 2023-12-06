@@ -61,3 +61,8 @@ input[type="submit"],
     width: auto;
     text-align: center; /* Center text for better presentation */
 }
+
+.link-button:hover,
+input[type="submit"]:hover {
+    background-color: #a1d9f0; /* Darker color on hover */
+  }
