@@ -8,12 +8,16 @@ const FriendReqModel = require('./models/friendreq')
 const axios = require('axios')
 
 const app = express()
+
 const port = 3001
 const url = 'http://localhost:' + port + "/"
 app.use(express.json())
 app.use(cors())
 
 mongoose.connect("mongodb+srv://max09lui:T4XEs0OHoUJIcJGF@cluster0.kcdmgrl.mongodb.net/?retryWrites=true&w=majority")
+
+
+
 
 
 
@@ -219,13 +223,31 @@ app.post('/sendFriendRequest', (req, res) => {
             FriendReqModel.create({friender, recipient})
                     .then(fReq => 
                         res.status(200).json({ status: "Success: Friend request from " + friender + " sent to " + recipient, friendRequest: fReq}))
-            .catch(err => res.json(err))
+                    .catch(err => res.json(err))        
         }
     })
     .catch(err => res.json(err))
 })
 
 // works for both friend requests and accepted friendships
+app.delete('/deleteFriend', async (req, res) => {
+    const {person1, person2} = req.body;
+    try {
+        const deletedDocument = await FriendReqModel.findOneAndDelete({
+            $or: [
+                {friender: person1, recipient: person2},
+                {friender: person2, recipient: person1}
+            ]
+        });
+        if (!deletedDocument) {
+          return res.status(404).json({ error: 'Friendship or friend request not found' });
+        }
+        res.json({ message: 'Friend request deleted successfully' });
+      } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+      }
+  }); 
+
 ////////////////////////////
 //// USERPROFILE-RELATED
 ////////////////////////////
@@ -258,7 +280,6 @@ app.get('/getUserId', async (req, res) => {
 
 app.delete('/deleteDocument/:id', async (req, res) => {
     const { id } = req.params; // Get the ID from the URL parameter
-  
     try {
       const deletedDocument = await UserModel.findByIdAndDelete(id);
       if (!deletedDocument) {
@@ -271,7 +292,7 @@ app.delete('/deleteDocument/:id', async (req, res) => {
   });
 
 
-  app.put('/updateUserBio/:id', async (req, res) => {
+app.put('/updateUserBio/:id', async (req, res) => {
     try {
         const { id } = req.params; // Get the ID of the user to update from the URL parameter
         const { bio } = req.body; // Get the new bio value from the request body
@@ -300,7 +321,7 @@ app.put('/updateProfilePicture/:id', async (req, res) => {
 });
 
 
-  app.put('/updateUserBio/:id', async (req, res) => {
+app.put('/updateUserBio/:id', async (req, res) => {
     try {
         const { id } = req.params; // Get the ID of the user to update from the URL parameter
         const { bio } = req.body; // Get the new bio value from the request body
@@ -332,5 +353,6 @@ app.put('/updateProfilePicture/:id', async (req, res) => {
 //// OTHER
 ////////////////////////////
 
+app.listen(port, () =>{ // Start on this port
     console.log("server is running")
 })
